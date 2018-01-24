@@ -1,5 +1,5 @@
 #===================================================================
-#        PC名、愛称取得パッケージ
+#        城塞データ取得パッケージ(まだ実装してません)
 #-------------------------------------------------------------------
 #            (C) 2018 @white_mns
 #===================================================================
@@ -17,7 +17,7 @@ use source::lib::GetNode;
 #------------------------------------------------------------------#
 #    パッケージの定義
 #------------------------------------------------------------------#     
-package Name;
+package FortressData;
 
 #-----------------------------------#
 #    コンストラクタ
@@ -53,18 +53,18 @@ sub Init(){
                 "nickname",
     );
 
-    $self->{Datas}{Data}  = $data;
-    $self->{Datas}{Data}->Init(\@headerList);
+    $self->{Datas}{FortressData}  = $data;
+    $self->{Datas}{FortressData}->Init(\@headerList);
     
     #出力ファイル設定
-    $self->{Datas}{Data}->SetOutputName( "./output/chara/name_" . $self->{ResultNo} . "_" . $self->{GenerateNo} . ".csv" );
+    $self->{Datas}{FortressData}->SetOutputName( "./output/chara/fortress_data_" . $self->{ResultNo} . "_" . $self->{GenerateNo} . ".csv" );
     return;
 }
 
 #-----------------------------------#
 #    データ取得
 #------------------------------------
-#    引数｜e_no,名前データノード
+#    引数｜e_no,城塞データノード
 #-----------------------------------#
 sub GetData{
     my $self = shift;
@@ -78,9 +78,9 @@ sub GetData{
     return;
 }
 #-----------------------------------#
-#    名前データ取得
+#    城塞データ取得
 #------------------------------------
-#    引数｜名前データノード
+#    引数｜城塞データノード
 #-----------------------------------#
 sub GetNameData{
     my $self  = shift;
@@ -93,7 +93,7 @@ sub GetNameData{
     $nickname =~ s/\s$//;
 
     my @datas=($self->{ResultNo}, $self->{GenerateNo}, $self->{ENo}, $name, $nickname);
-    $self->{Datas}{Data}->AddData(join(ConstData::SPLIT, @datas));
+    $self->{Datas}{FortressData}->AddData(join(ConstData::SPLIT, @datas));
 
     return;
 }

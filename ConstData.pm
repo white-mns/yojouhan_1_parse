@@ -18,12 +18,13 @@ use warnings;
 #      実行する場合は 1 ，実行しない場合は 0 ．
     
     use constant EXE_ALLRESULT  => 1;         # 0=> 部分探索(ex:1～10) 1=> 全結果探索
-        use constant FLAGMENT_START    => 280;    #部分探索開始
-        use constant FLAGMENT_END      => 290;    #部分探索終了
+        use constant FLAGMENT_START    => 10;    #部分探索開始
+        use constant FLAGMENT_END      => 10;    #部分探索終了
     
     use constant EXE_CHARA      => 1;
-        use constant EXE_CHARA_NAME    => 1;
-        use constant EXE_CHARA_ITEM    => 1;
+        use constant EXE_CHARA_NAME          => 1;
+        use constant EXE_CHARA_STATUS        => 1;
+        use constant EXE_CHARA_FORTRESS_DATA => 1;
     use constant EXE_TSV        => 1;
         use constant EXE_TSV_UNITDATA  => 1;
 1;
