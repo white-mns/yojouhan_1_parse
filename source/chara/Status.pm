@@ -76,8 +76,8 @@ sub Init(){
 #    引数｜e_no,ステータスデータノード
 #-----------------------------------#
 sub GetData{
-    my $self = shift;
-    my $e_no  = shift;
+    my $self         = shift;
+    my $e_no         = shift;
     my $status_nodes = shift;
     
     $self->{ENo} = $e_no;
@@ -92,7 +92,7 @@ sub GetData{
 #    引数｜ステータスデータノード
 #-----------------------------------#
 sub GetStatusData{
-    my $self  = shift;
+    my $self         = shift;
     my $status_node  = shift;
 
     my ($acc_profit, $rp,$repute, $charm, $tact, $smile, $elegance, $knowledge, $perseverance, $funds, $exp) = (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
