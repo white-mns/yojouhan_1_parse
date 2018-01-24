@@ -1,5 +1,5 @@
 #===================================================================
-#        PC名、愛称取得パッケージ
+#        ステータス取得パッケージ
 #-------------------------------------------------------------------
 #            (C) 2018 @white_mns
 #===================================================================
@@ -17,7 +17,7 @@ use source::lib::GetNode;
 #------------------------------------------------------------------#
 #    パッケージの定義
 #------------------------------------------------------------------#     
-package Name;
+package Status;
 
 #-----------------------------------#
 #    コンストラクタ
@@ -49,50 +49,92 @@ sub Init(){
                 "result_no",
                 "generate_no",
                 "e_no",
-                "name",
-                "nickname",
+                "acc_profit",
+                "rp",
+                "repute",
+                "charm",
+                "tact",
+                "smile",
+                "elegance",
+                "knowledge",
+                "perseverance",
+                "funds",
+                "exp",
     );
 
     $self->{Datas}{Data}  = $data;
     $self->{Datas}{Data}->Init(\@headerList);
     
     #出力ファイル設定
-    $self->{Datas}{Data}->SetOutputName( "./output/chara/name_" . $self->{ResultNo} . "_" . $self->{GenerateNo} . ".csv" );
+    $self->{Datas}{Data}->SetOutputName( "./output/chara/status_" . $self->{ResultNo} . "_" . $self->{GenerateNo} . ".csv" );
     return;
 }
 
 #-----------------------------------#
 #    データ取得
 #------------------------------------
-#    引数｜e_no,名前データノード
+#    引数｜e_no,ステータスデータノード
 #-----------------------------------#
 sub GetData{
     my $self = shift;
     my $e_no  = shift;
-    my $minieffect_nodes = shift;
+    my $status_nodes = shift;
     
     $self->{ENo} = $e_no;
 
-    $self->GetNameData($minieffect_nodes);
+    $self->GetStatusData($status_nodes);
     
     return;
 }
 #-----------------------------------#
-#    名前データ取得
+#    ステータスデータ取得
 #------------------------------------
-#    引数｜名前データノード
+#    引数｜ステータスデータノード
 #-----------------------------------#
-sub GetNameData{
+sub GetStatusData{
     my $self  = shift;
-    my $minieffect_nodes  = shift;
+    my $status_node  = shift;
 
-    my $name = $$minieffect_nodes[0]->right->as_text;
+    my ($acc_profit, $rp,$repute, $charm, $tact, $smile, $elegance, $knowledge, $perseverance, $funds, $exp) = (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+    my $th_nodes = &GetNode::GetNode_Tag("th", \$status_node);
 
-    my $nickname = $$minieffect_nodes[1]->right;
-    $nickname =~ s/^　//;
-    $nickname =~ s/\s$//;
+    foreach my $th_node (@$th_nodes){
+        if($th_node->as_text eq "累積粗利"){
+            $acc_profit = $th_node->right->as_text;
 
-    my @datas=($self->{ResultNo}, $self->{GenerateNo}, $self->{ENo}, $name, $nickname);
+        }elsif($th_node->as_text eq "RP"){
+            $rp = $th_node->right->as_text;
+
+        }elsif($th_node->as_text eq "あなたの評判"){
+            $repute = $th_node->right->as_text;
+
+        }elsif($th_node->as_text eq "魅力"){
+            $charm = $th_node->right->as_text;
+
+        }elsif($th_node->as_text eq "機転"){
+            $tact = $th_node->right->as_text;
+
+        }elsif($th_node->as_text eq "笑顔"){
+            $smile = $th_node->right->as_text;
+
+        }elsif($th_node->as_text eq "気品"){
+            $elegance = $th_node->right->as_text;
+
+        }elsif($th_node->as_text eq "知識"){
+            $knowledge = $th_node->right->as_text;
+
+        }elsif($th_node->as_text eq "忍耐"){
+            $perseverance = $th_node->right->as_text;
+
+        }elsif($th_node->as_text eq "所持資金"){
+            $funds = $th_node->right->as_text;
+
+        }elsif($th_node->as_text eq "経験値"){
+            $exp = $th_node->right->as_text;
+
+        }
+    }
+    my @datas=($self->{ResultNo}, $self->{GenerateNo}, $self->{ENo}, $acc_profit, $rp,$repute, $charm, $tact, $smile, $elegance, $knowledge, $perseverance, $funds, $exp);
     $self->{Datas}{Data}->AddData(join(ConstData::SPLIT, @datas));
 
     return;

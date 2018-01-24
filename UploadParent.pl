@@ -74,6 +74,10 @@ sub Main {
             $upload->DeleteSameResult('items', $result_no, $generate_no);
             $upload->Upload("./output/chara/item_" . $result_no . "_" . $generate_no . ".csv", 'items');
         }
+        if(ConstData::EXE_CHARA_ITEM)    {
+            $upload->DeleteSameResult('statuses', $result_no, $generate_no);
+            $upload->Upload("./output/chara/status_" . $result_no . "_" . $generate_no . ".csv", 'statuses');
+        }
     }
     if(ConstData::EXE_NEW){
         if(ConstData::EXE_NEW_FUKA)    {
