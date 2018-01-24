@@ -56,12 +56,16 @@ sub Init(){
     $self->{DataHandlers}{UnitOrigName} = StoreProperName->new();
     $self->{DataHandlers}{Fuka}         = StoreProperName->new();
     $self->{DataHandlers}{Elemental}    = StoreProperName->new();
+    $self->{DataHandlers}{Regalia}      = StoreProperName->new();
+    $self->{DataHandlers}{CastleStatus} = StoreProperName->new();
 
     #他パッケージへの引き渡し用インスタンス
     $self->{CommonDatas}{UnitType}     = $self->{DataHandlers}{UnitType};
     $self->{CommonDatas}{UnitOrigName} = $self->{DataHandlers}{UnitOrigName};
     $self->{CommonDatas}{Fuka}         = $self->{DataHandlers}{Fuka};
     $self->{CommonDatas}{Elemental}    = $self->{DataHandlers}{Elemental};
+    $self->{CommonDatas}{Regalia}      = $self->{DataHandlers}{Regalia};
+    $self->{CommonDatas}{CastleStatus} = $self->{DataHandlers}{CastleStatus};
 
     my $header_list = "";
     my $output_file = "";
@@ -93,6 +97,20 @@ sub Init(){
     ];
     $output_file = "./output/data/". "elemental" . ".csv";
     $self->{DataHandlers}{Elemental}->Init($header_list, $output_file, " ");
+
+    $header_list = [
+                "regalia_id",
+                "name",
+    ];
+    $output_file = "./output/data/". "regalia" . ".csv";
+    $self->{DataHandlers}{Regalia}->Init($header_list, $output_file, " ");
+
+    $header_list = [
+                "castle_status_id",
+                "name",
+    ];
+    $output_file = "./output/data/". "castle_status" . ".csv";
+    $self->{DataHandlers}{CastleStatus}->Init($header_list, $output_file, " ");
 
     return;
 }

@@ -140,11 +140,12 @@ sub ParsePage{
     my $minieffect_nodes = &GetNode::GetNode_Tag_Class("div","minieffect", \$charadata_node);
     my $status_nodes     = &GetNode::GetNode_Tag_Class("table","charadata", \$tree);
     $status_nodes = scalar(@$status_nodes) ? $status_nodes : &GetNode::GetNode_Tag_Class("table","charadata2", \$tree);
+    my $spec_data_nodes     = &GetNode::GetNode_Tag_Class("table","specdata", \$tree);
 
     # データリスト取得
     if(exists($self->{DataHandlers}{Name}))         {$self->{DataHandlers}{Name}->GetData($e_no, $minieffect_nodes)};
-    if(exists($self->{DataHandlers}{Status}))       {$self->{DataHandlers}{Status}->GetData($e_no, $$status_nodes[0], $self->{CommonDatas})};
-    if(exists($self->{DataHandlers}{FortressData})) {$self->{DataHandlers}{FortressData}->GetData($e_no, $minieffect_nodes, $self->{CommonDatas})};
+    if(exists($self->{DataHandlers}{Status}))       {$self->{DataHandlers}{Status}->GetData($e_no, $$status_nodes[0])};
+    if(exists($self->{DataHandlers}{FortressData})) {$self->{DataHandlers}{FortressData}->GetData($e_no, $$spec_data_nodes[0], $self->{CommonDatas})};
 
     $tree = $tree->delete;
 }

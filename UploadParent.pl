@@ -64,6 +64,10 @@ sub Main {
 		    $upload->DeleteAll("elemental_lists");
             $upload->Upload("./output/data/elemental.csv", 'elemental_lists');
         }
+        if(ConstData::EXE_DATA_REGALIA)    {
+		    $upload->DeleteAll("regalia_lists");
+            $upload->Upload("./output/data/regalia.csv", 'regalia_lists');
+        }
     }
     if(ConstData::EXE_CHARA){
         if(ConstData::EXE_CHARA_NAME)    {
@@ -74,9 +78,13 @@ sub Main {
             $upload->DeleteSameResult('items', $result_no, $generate_no);
             $upload->Upload("./output/chara/item_" . $result_no . "_" . $generate_no . ".csv", 'items');
         }
-        if(ConstData::EXE_CHARA_ITEM)    {
+        if(ConstData::EXE_CHARA_STATUS)    {
             $upload->DeleteSameResult('statuses', $result_no, $generate_no);
             $upload->Upload("./output/chara/status_" . $result_no . "_" . $generate_no . ".csv", 'statuses');
+        }
+        if(ConstData::EXE_CHARA_FORTRESS_DATA)    {
+            $upload->DeleteSameResult('fortress_data', $result_no, $generate_no);
+            $upload->Upload("./output/chara/fortress_data_" . $result_no . "_" . $generate_no . ".csv", 'fortress_data');
         }
     }
     if(ConstData::EXE_NEW){
