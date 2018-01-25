@@ -52,20 +52,20 @@ sub Init(){
 
     #インスタンス作成
     if(ConstData::EXE_TSV_UNITDATA)  {$self->{DataHandlers}{UnitData} = UnitData->new();}
-    $self->{DataHandlers}{UnitType}     = StoreProperName->new();
-    $self->{DataHandlers}{UnitOrigName} = StoreProperName->new();
-    $self->{DataHandlers}{Fuka}         = StoreProperName->new();
-    $self->{DataHandlers}{Elemental}    = StoreProperName->new();
-    $self->{DataHandlers}{Regalia}      = StoreProperName->new();
-    $self->{DataHandlers}{CastleStatus} = StoreProperName->new();
+    $self->{DataHandlers}{UnitType}        = StoreProperName->new();
+    $self->{DataHandlers}{UnitOrigName}    = StoreProperName->new();
+    $self->{DataHandlers}{Fuka}            = StoreProperName->new();
+    $self->{DataHandlers}{Elemental}       = StoreProperName->new();
+    $self->{DataHandlers}{Regalia}         = StoreProperName->new();
+    $self->{DataHandlers}{CastleCondition} = StoreProperName->new();
 
     #他パッケージへの引き渡し用インスタンス
-    $self->{CommonDatas}{UnitType}     = $self->{DataHandlers}{UnitType};
-    $self->{CommonDatas}{UnitOrigName} = $self->{DataHandlers}{UnitOrigName};
-    $self->{CommonDatas}{Fuka}         = $self->{DataHandlers}{Fuka};
-    $self->{CommonDatas}{Elemental}    = $self->{DataHandlers}{Elemental};
-    $self->{CommonDatas}{Regalia}      = $self->{DataHandlers}{Regalia};
-    $self->{CommonDatas}{CastleStatus} = $self->{DataHandlers}{CastleStatus};
+    $self->{CommonDatas}{UnitType}        = $self->{DataHandlers}{UnitType};
+    $self->{CommonDatas}{UnitOrigName}    = $self->{DataHandlers}{UnitOrigName};
+    $self->{CommonDatas}{Fuka}            = $self->{DataHandlers}{Fuka};
+    $self->{CommonDatas}{Elemental}       = $self->{DataHandlers}{Elemental};
+    $self->{CommonDatas}{Regalia}         = $self->{DataHandlers}{Regalia};
+    $self->{CommonDatas}{CastleCondition} = $self->{DataHandlers}{CastleCondition};
 
     my $header_list = "";
     my $output_file = "";
@@ -106,11 +106,11 @@ sub Init(){
     $self->{DataHandlers}{Regalia}->Init($header_list, $output_file, " ");
 
     $header_list = [
-                "castle_status_id",
+                "castle_condition_id",
                 "name",
     ];
-    $output_file = "./output/data/". "castle_status" . ".csv";
-    $self->{DataHandlers}{CastleStatus}->Init($header_list, $output_file, " ");
+    $output_file = "./output/data/". "castle_condition" . ".csv";
+    $self->{DataHandlers}{CastleCondition}->Init($header_list, $output_file, " ");
 
     return;
 }

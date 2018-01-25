@@ -79,10 +79,24 @@ sub Init(){
 
     $self->{Datas}{FortressGuardData}  = $data;
     $self->{Datas}{FortressGuardData}->Init(\@headerList);
-    
+   
+    $data = StoreData->new();
+    @headerList = (
+                "result_no",
+                "generate_no",
+                "e_no",
+                "condition_text",
+    );
+
+    $self->{Datas}{CastleConditionTextData}  = $data;
+    $self->{Datas}{CastleConditionTextData}->Init(\@headerList);
+
+
+
     #出力ファイル設定
     $self->{Datas}{FortressData}->SetOutputName( "./output/chara/fortress_data_" . $self->{ResultNo} . "_" . $self->{GenerateNo} . ".csv" );
-    $self->{Datas}{FortressGuardData}->SetOutputName( "./output/chara/fortress_guard_data_" . $self->{ResultNo} . "_" . $self->{GenerateNo} . ".csv" );
+    $self->{Datas}{FortressGuardData}->SetOutputName( "./output/chara/fortress_guard_" . $self->{ResultNo} . "_" . $self->{GenerateNo} . ".csv" );
+    $self->{Datas}{CastleConditionTextData}->SetOutputName( "./output/chara/castle_condition_text_" . $self->{ResultNo} . "_" . $self->{GenerateNo} . ".csv" );
     return;
 }
 
@@ -100,6 +114,8 @@ sub GetData{
     $self->{ENo} = $e_no;
 
     $self->GetFortressData($spec_data_node, $common_datas);
+    $self->GetFortressGuardData($spec_data_node, $common_datas);
+    $self->GetCastleConditionData($spec_data_node, $common_datas);
     
     return;
 }
@@ -160,6 +176,83 @@ sub GetFortressData{
 
     my @datas=($self->{ResultNo}, $self->{GenerateNo}, $self->{ENo}, $grand, $caution, $continuance, $enthusiasm, $goodwill, $forecast, $stock, $high_grade, $mob, $drink, $regalia);
     $self->{Datas}{FortressData}->AddData(join(ConstData::SPLIT, @datas));
+
+    return;
+}
+
+#-----------------------------------#
+#    属性防御データ取得
+#------------------------------------
+#    引数｜城塞データノード
+#-----------------------------------#
+sub GetFortressGuardData{
+    my $self           = shift;
+    my $spec_data_node = shift;
+    my $common_datas   = shift;
+
+    my ($pysics, $electric_shock, $cold, $flame, $saint_devil) = (0, 0, 0, 0, 0);
+
+    my $th_nodes = &GetNode::GetNode_Tag("th", \$spec_data_node);
+
+    foreach my $th_node (@$th_nodes){
+        if($th_node->as_text eq "物理防御"){
+            my $text = $th_node->right->as_text;
+            $pysics = ($text && $text ne " ") ? $text : 0;
+
+        }elsif($th_node->as_text eq "電撃防御"){
+            my $text = $th_node->right->as_text;
+            $electric_shock = ($text && $text ne " ") ? $text : 0;
+
+        }elsif($th_node->as_text eq "冷気防御"){
+            my $text = $th_node->right->as_text;
+            $cold = ($text && $text ne " ") ? $text : 0;
+
+        }elsif($th_node->as_text eq "火炎防御"){
+            my $text = $th_node->right->as_text;
+            $flame = ($text && $text ne " ") ? $text : 0;
+
+        }elsif($th_node->as_text eq "聖魔防御"){
+            my $text = $th_node->right->as_text;
+            $saint_devil = ($text && $text ne " ") ? $text : 0;
+
+        }
+    }
+
+    my @datas=($self->{ResultNo}, $self->{GenerateNo}, $self->{ENo}, $pysics, $electric_shock, $cold, $flame, $saint_devil);
+    $self->{Datas}{FortressGuardData}->AddData(join(ConstData::SPLIT, @datas));
+
+    return;
+}
+
+#-----------------------------------#
+#    城状況データ取得
+#------------------------------------
+#    引数｜城塞データノード
+#-----------------------------------#
+sub GetCastleConditionData{
+    my $self           = shift;
+    my $spec_data_node = shift;
+    my $common_datas   = shift;
+
+    my ($condition, $condition_text) = (0, "");
+
+    my $th_nodes = &GetNode::GetNode_Tag("th", \$spec_data_node);
+
+    foreach my $th_node (@$th_nodes){
+        if($th_node->as_text eq "城状況"){
+            foreach my $child ($th_node->right->content_list){
+                my $text = ($child =~ /HASH/) ? $child->as_text : $child;
+                
+                if(!($text && $text ne " ")){ next;}
+                $$common_datas{CastleCondition}->GetOrAddId($text);
+                $condition_text .= ($text && $text ne " ") ? "$text," : "";
+            }
+
+        }
+    }
+    chop($condition_text);
+    my @datas=($self->{ResultNo}, $self->{GenerateNo}, $self->{ENo}, $condition_text);
+    $self->{Datas}{CastleConditionTextData}->AddData(join(ConstData::SPLIT, @datas));
 
     return;
 }
