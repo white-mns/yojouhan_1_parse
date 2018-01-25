@@ -97,7 +97,7 @@ sub GetData(){
 
 #-----------------------------------#
 #
-#        データを所持しているか判定(一列目はE-No情報と想定する)
+#        データを所持しているか判定
 #        引数：ファイルアドレス
 #
 #-----------------------------------#
@@ -105,10 +105,9 @@ sub CheckHaveData{
     my $self = shift;
     my $key  = shift;
     
-    if(${ $self->{StoreData} }{$key}){
+    if(exists(${ $self->{StoreData} }{$key})){
         return 1;
     }else{
-        delete(${ $self->{StoreData} }{$key});
         return 0;
     }
 }
