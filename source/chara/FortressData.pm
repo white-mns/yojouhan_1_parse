@@ -151,7 +151,8 @@ sub GetFortressData{
             $drink = ($text && $text ne " ") ? $text : 0;
 
         }elsif($th_node->as_text eq "レガリア"){
-            my $text = $th_node->right->as_text;
+            my @children = $th_node->right->content_list();
+            my $text = $children[0];
             $regalia = ($text && $text ne " ") ? $$common_datas{Regalia}->GetOrAddId($text) : 0;
 
         }
