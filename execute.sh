@@ -1,7 +1,7 @@
 #!/bin/bash
-# for  Analyrze Seven Seas Result
 
-cd `dirname $0`
+CURENT=`pwd`	#実行ディレクトリの保存
+cd `dirname $0`	#解析コードのあるディレクトリで作業をする
 
 RESULT_NO=`printf "%03d" $1`
 GENERATE_NO=$2
@@ -12,7 +12,7 @@ else
     ZIP_NAME=${RESULT_NO}_$GENERATE_NO
 fi
 
-#本家に圧縮結果がアップロードされる定期ゲーはwgetでダウンロードする
+#本家に圧縮結果がアップロードされる定期更新ゲームの場合はwgetでダウンロードする
 #wget -O data/orig/result${RESULT_NO}_$GENERATE_NO.zip http://www.sssloxia.jp/result${RESULT_NO}.zip  
 
 # 元ファイルを変換し圧縮
