@@ -78,8 +78,9 @@ sub Execute{
 
     my $start = 1;
     my $end   = 0;
-    my $directory = './data/utf/' . $self->{ResultNo0} . '/RESULT';
+    my $directory = './data/utf/' . $self->{ResultNo0};
     $directory .= ($self->{GenerateNo} == 0) ? '' :  '_' . $self->{GenerateNo};
+    $directory .= '/RESULT';
     if(ConstData::EXE_ALLRESULT){
         #結果全解析
         my @file_list = grep { -f } glob("$directory/c*.html");

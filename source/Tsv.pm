@@ -73,8 +73,9 @@ sub Execute{
 
     my $start = 1;
     my $end   = 0;
-    my $directory = './data/utf/' . $self->{ResultNo0} . '/tsv_DATA';
+    my $directory = './data/utf/' . $self->{ResultNo0};
     $directory .= ($self->{GenerateNo} == 0) ? '' :  '_' . $self->{GenerateNo};
+    $directory .= '/tsv_DATA';
 
     $self->ReadTsvDatas($directory);
     
