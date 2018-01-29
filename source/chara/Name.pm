@@ -36,12 +36,7 @@ sub new {
 #-----------------------------------#
 sub Init(){
     my $self = shift;
-    my $result_num = shift;
-    my $generate_num = shift;
-    
-
-    $self->{ResultNo}   = $result_num;
-    $self->{GenerateNo} = $generate_num;
+    ($self->{ResultNo}, $self->{GenerateNo}, $self->{CommonDatas}) = @_;
     
     #初期化
     my $data = StoreData->new();

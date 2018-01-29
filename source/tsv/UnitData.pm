@@ -40,12 +40,7 @@ sub new {
 #-----------------------------------#
 sub Init(){
     my $self = shift;
-    my $result_num = shift;
-    my $generate_num = shift;
-    
-
-    $self->{ResultNo} = $result_num;
-    $self->{GenerateNo} = $generate_num;
+    ($self->{ResultNo}, $self->{GenerateNo}, $self->{CommonDatas}) = @_;
     
     #初期化
     my $item = StoreData->new();
@@ -82,7 +77,6 @@ sub Init(){
 sub GetData{
     my $self         = shift;
     my $file_name    = shift;
-    my $common_datas = shift;
     
     my $content   = &IO::FileRead ( $file_name );
     my @file_data = split(/\n/, $content);
@@ -94,10 +88,10 @@ sub GetData{
         
         if(scalar(@$data) < 1 || !$$data[0] || !$$data[2]){ next;}
         
-        $$common_datas{UnitType}->GetOrAddId($$data[2]);
-        if($$data[28]){ $$common_datas{UnitOrigName}->SetId($$data[28], $$data[36]);}
+        $self->{CommonDatas}{UnitType}->GetOrAddId($$data[2]);
+        if($$data[28]){ $self->{CommonDatas}{UnitOrigName}->SetId($$data[28], $$data[36]);}
 
-        $self->GetUnitData($data, $common_datas);
+        $self->GetUnitData($data);
     } 
     
     return;
@@ -112,18 +106,17 @@ sub GetData{
 sub GetUnitData{
     my $self         = shift;
     my $data         = shift;
-    my $common_datas = shift;
 
     my $e_no = int($$data[0] / 31);
     my $i_no = $$data[0] % 31;
     
-    my $type = ($$data[2]) ? $$common_datas{UnitType}->GetOrAddId($$data[2]) : 0;
+    my $type = ($$data[2]) ? $self->{CommonDatas}{UnitType}->GetOrAddId($$data[2]) : 0;
     my $orig_name = ($$data[28]) ? $$data[28] : 0;
     my $name = $$data[1];
     my $strength = $$data[21];
-    my $fuka1 = ($$data[30]) ? $$common_datas{Fuka}->GetOrAddId($$data[30]) : 0;
-    my $fuka2 = ($$data[31]) ? $$common_datas{Fuka}->GetOrAddId($$data[31]) : 0;
-    my $guard_elemental = ($$data[11]) ? $$common_datas{Elemental}->GetOrAddId($$data[11]) : 0;
+    my $fuka1 = ($$data[30]) ? $self->{CommonDatas}{Fuka}->GetOrAddId($$data[30]) : 0;
+    my $fuka2 = ($$data[31]) ? $self->{CommonDatas}{Fuka}->GetOrAddId($$data[31]) : 0;
+    my $guard_elemental = ($$data[11]) ? $self->{CommonDatas}{Elemental}->GetOrAddId($$data[11]) : 0;
     my $stock = ($$data[16]) ? $$data[16] : 0;
     my $value = ($$data[7]) ? $$data[7] : 0;
     

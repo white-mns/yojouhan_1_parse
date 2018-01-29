@@ -55,7 +55,7 @@ sub Init(){
 
     #初期化処理
     foreach my $object( values %{ $self->{DataHandlers} } ) {
-        $object->Init($self->{ResultNo},$self->{GenerateNo});
+        $object->Init($self->{ResultNo}, $self->{GenerateNo}, $self->{CommonDatas});
     }
     
     return;
@@ -93,7 +93,7 @@ sub ReadTsvDatas{
     my $directory   = shift;
 
     # データリスト取得
-    if(exists($self->{DataHandlers}{UnitData}))         {$self->{DataHandlers}{UnitData}->GetData($directory."/UNIT_DATA.tsv", $self->{CommonDatas})};
+    if(exists($self->{DataHandlers}{UnitData}))         {$self->{DataHandlers}{UnitData}->GetData($directory."/UNIT_DATA.tsv")};
 }
 
 #-----------------------------------#

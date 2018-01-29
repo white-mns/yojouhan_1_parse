@@ -60,7 +60,7 @@ sub Init(){
 
     #初期化処理
     foreach my $object( values %{ $self->{DataHandlers} } ) {
-        $object->Init($self->{ResultNo},$self->{GenerateNo});
+        $object->Init($self->{ResultNo}, $self->{GenerateNo}, $self->{CommonDatas});
     }
     
     return;
@@ -146,7 +146,7 @@ sub ParsePage{
     # データリスト取得
     if(exists($self->{DataHandlers}{Name}))         {$self->{DataHandlers}{Name}->GetData($e_no, $minieffect_nodes)};
     if(exists($self->{DataHandlers}{Status}))       {$self->{DataHandlers}{Status}->GetData($e_no, $$status_nodes[0])};
-    if(exists($self->{DataHandlers}{FortressData})) {$self->{DataHandlers}{FortressData}->GetData($e_no, $$spec_data_nodes[0], $self->{CommonDatas})};
+    if(exists($self->{DataHandlers}{FortressData})) {$self->{DataHandlers}{FortressData}->GetData($e_no, $$spec_data_nodes[0])};
 
     $tree = $tree->delete;
 }

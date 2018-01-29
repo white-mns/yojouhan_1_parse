@@ -36,12 +36,7 @@ sub new {
 #-----------------------------------#
 sub Init(){
     my $self = shift;
-    my $result_num = shift;
-    my $generate_num = shift;
-    
-
-    $self->{ResultNo}   = $result_num;
-    $self->{GenerateNo} = $generate_num;
+    ($self->{ResultNo}, $self->{GenerateNo}, $self->{CommonDatas}) = @_;
     
     #初期化
     my $data = StoreData->new();
@@ -109,13 +104,12 @@ sub GetData{
     my $self           = shift;
     my $e_no           = shift;
     my $spec_data_node = shift;
-    my $common_datas   = shift;
     
     $self->{ENo} = $e_no;
 
-    $self->GetFortressData($spec_data_node, $common_datas);
-    $self->GetFortressGuardData($spec_data_node, $common_datas);
-    $self->GetCastleConditionData($spec_data_node, $common_datas);
+    $self->GetFortressData($spec_data_node);
+    $self->GetFortressGuardData($spec_data_node);
+    $self->GetCastleConditionData($spec_data_node);
     
     return;
 }
@@ -128,7 +122,6 @@ sub GetData{
 sub GetFortressData{
     my $self           = shift;
     my $spec_data_node = shift;
-    my $common_datas   = shift;
 
     my ($grand, $caution, $continuance, $enthusiasm, $goodwill, $forecast, $stock, $high_grade, $mob, $drink, $regalia) = (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
@@ -169,7 +162,7 @@ sub GetFortressData{
         }elsif($th_node->as_text eq "レガリア"){
             my @children = $th_node->right->content_list();
             my $text = $children[0];
-            $regalia = ($text && $text ne " ") ? $$common_datas{Regalia}->GetOrAddId($text) : 0;
+            $regalia = ($text && $text ne " ") ? $self->{CommonDatas}{Regalia}->GetOrAddId($text) : 0;
 
         }
     }
@@ -188,7 +181,6 @@ sub GetFortressData{
 sub GetFortressGuardData{
     my $self           = shift;
     my $spec_data_node = shift;
-    my $common_datas   = shift;
 
     my ($pysics, $electric_shock, $cold, $flame, $saint_devil) = (0, 0, 0, 0, 0);
 
@@ -232,7 +224,6 @@ sub GetFortressGuardData{
 sub GetCastleConditionData{
     my $self           = shift;
     my $spec_data_node = shift;
-    my $common_datas   = shift;
 
     my ($condition, $condition_text) = (0, "");
 
@@ -244,7 +235,7 @@ sub GetCastleConditionData{
                 my $text = ($child =~ /HASH/) ? $child->as_text : $child;
                 
                 if(!($text && $text ne " ")){ next;}
-                $$common_datas{CastleCondition}->GetOrAddId($text);
+                $self->{CommonDatas}{CastleCondition}->GetOrAddId($text);
                 $condition_text .= ($text && $text ne " ") ? "$text," : "";
             }
 
