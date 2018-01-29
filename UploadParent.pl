@@ -99,6 +99,12 @@ sub Main {
             $upload->Upload("./output/chara/castle_condition_text_" . $result_no . "_" . $generate_no . ".csv", 'castle_condition_texts');
         }
     }
+    if(ConstData::EXE_CHARALIST){
+        if(ConstData::EXE_CHARALIST_NEXT_BATTLE)    {
+            $upload->DeleteSameResult('next_battles', $result_no, $generate_no);
+            $upload->Upload("./output/charalist/next_battle_" . $result_no . "_" . $generate_no . ".csv", 'next_battles');
+        }
+    }
     if(ConstData::EXE_NEW){
         if(ConstData::EXE_NEW_FUKA)    {
             $upload->DeleteSameResult('new_fukas', $result_no, $generate_no);

@@ -17,7 +17,7 @@ use source::lib::GetNode;
 #------------------------------------------------------------------#
 #    パッケージの定義
 #------------------------------------------------------------------#     
-package Name;
+package NextBattle;
 
 #-----------------------------------#
 #    コンストラクタ
@@ -43,16 +43,15 @@ sub Init(){
     my @headerList = (
                 "result_no",
                 "generate_no",
+                "block_no",
                 "e_no",
-                "name",
-                "nickname",
     );
 
     $self->{Datas}{Data}  = $data;
     $self->{Datas}{Data}->Init(\@headerList);
     
     #出力ファイル設定
-    $self->{Datas}{Data}->SetOutputName( "./output/chara/name_" . $self->{ResultNo} . "_" . $self->{GenerateNo} . ".csv" );
+    $self->{Datas}{Data}->SetOutputName( "./output/charalist/next_battle_" . $self->{ResultNo} . "_" . $self->{GenerateNo} . ".csv" );
     return;
 }
 
@@ -62,33 +61,42 @@ sub Init(){
 #    引数｜e_no,名前データノード
 #-----------------------------------#
 sub GetData{
-    my $self = shift;
-    my $e_no  = shift;
-    my $minieffect_nodes = shift;
-    
-    $self->{ENo} = $e_no;
+    my $self     = shift;
+    my $hr_nodes = shift;
 
-    $self->GetNameData($minieffect_nodes);
+    $self->GetNextBattleData($hr_nodes);
     
     return;
 }
 #-----------------------------------#
-#    名前データ取得
+#    次回の組み合わせデータ取得
 #------------------------------------
 #    引数｜名前データノード
 #-----------------------------------#
-sub GetNameData{
-    my $self  = shift;
-    my $minieffect_nodes  = shift;
+sub GetNextBattleData{
+    my $self     = shift;
+    my $hr_nodes = shift;
 
-    my $name = $$minieffect_nodes[0]->right->as_text;
+    foreach my $hr_node (@$hr_nodes){
 
-    my $nickname = $$minieffect_nodes[1]->right;
-    $nickname =~ s/^　//;
-    $nickname =~ s/\s$//;
+        if($hr_node->as_text !~ /第(\d+)ブロック/){ next;}
 
-    my @datas=($self->{ResultNo}, $self->{GenerateNo}, $self->{ENo}, $name, $nickname);
-    $self->{Datas}{Data}->AddData(join(ConstData::SPLIT, @datas));
+        my $block_no =$1;
+        my @right_nodes = $hr_node->right;
+        my $table_node = $right_nodes[2];
+
+        my $a_nodes = &GetNode::GetNode_Tag("a", \$table_node);
+
+        foreach my $a_node (@$a_nodes){
+            my $link_text = $a_node->attr("href");
+
+            if($link_text !~ /RESULT\/c(\d{4})\.html/){ next;}
+            my $e_no = $1+0;
+            my @datas=($self->{ResultNo}, $self->{GenerateNo},  $block_no, $e_no);
+            $self->{Datas}{Data}->AddData(join(ConstData::SPLIT, @datas));
+
+        }
+    }
 
     return;
 }

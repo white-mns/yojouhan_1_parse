@@ -1,5 +1,5 @@
 #===================================================================
-#        キャラステータス解析パッケージ
+#        キャラリスト解析パッケージ
 #-------------------------------------------------------------------
 #            (C) 2018 @white_mns
 #===================================================================
@@ -18,16 +18,14 @@ require "./source/lib/IO.pm";
 require "./source/lib/time.pm";
 require "./source/lib/NumCode.pm";
 
-require "./source/chara/Name.pm";
-require "./source/chara/Status.pm";
-require "./source/chara/FortressData.pm";
+require "./source/charalist/NextBattle.pm";
 
 use ConstData;        #定数呼び出し
 
 #------------------------------------------------------------------#
 #    パッケージの定義
 #------------------------------------------------------------------#
-package Character;
+package CharacterList;
 
 #-----------------------------------#
 #    コンストラクタ
@@ -54,13 +52,11 @@ sub Init(){
     $self->{ResultNo0} = sprintf("%03d", $self->{ResultNo});
 
     #インスタンス作成
-    if(ConstData::EXE_CHARA_NAME)          { $self->{DataHandlers}{Name}         = Name->new();}
-    if(ConstData::EXE_CHARA_STATUS)        { $self->{DataHandlers}{Status}       = Status->new();}
-    if(ConstData::EXE_CHARA_FORTRESS_DATA) { $self->{DataHandlers}{FortressData} = FortressData->new();}
+    if(ConstData::EXE_CHARALIST_NEXT_BATTLE) { $self->{DataHandlers}{NextBattle} = NextBattle->new();}
 
     #初期化処理
     foreach my $object( values %{ $self->{DataHandlers} } ) {
-        $object->Init($self->{ResultNo}, $self->{GenerateNo}, $self->{CommonDatas});
+        $object->Init($self->{ResultNo},$self->{GenerateNo}, $self->{CommonDatas});
     }
     
     return;
@@ -76,39 +72,10 @@ sub Execute{
 
     print "read files...\n";
 
-    my $start = 1;
-    my $end   = 0;
     my $directory = './data/utf/' . $self->{ResultNo0};
     $directory .= ($self->{GenerateNo} == 0) ? '' :  '_' . $self->{GenerateNo};
-    $directory .= '/RESULT';
-    if(ConstData::EXE_ALLRESULT){
-        #結果全解析
-        my @file_list = grep { -f } glob("$directory/c*.html");
-        my $i = 0;
-        foreach my $file_adr (@file_list){
-            if($file_adr =~ /catalog/) {next};
-            $i++;
-            if($i % 10 == 0){print $i . "\n"};
-
-            $file_adr =~ /c(.*?)\.html/;
-            my $file_name = $1;
-            my $e_no = $file_name+0;
-            
-            $self->ParsePage($directory  . "/c" . $file_name . ".html", $e_no);
-        }
-    }else{
-        #指定範囲解析
-        $start = ConstData::FLAGMENT_START;
-        $end   = ConstData::FLAGMENT_END;
-        print "$start to $end\n";
-
-        for(my $i=$start; $i<=$end; $i++){
-            if($i % 10 == 0){print $i . "\n"};
-            my $i0 = sprintf("%04d", $i);
-            $self->ParsePage($directory  . "/c" . $i0 . ".html",$i);
-        }
-    }
-
+                
+    $self->ParsePage($directory  . "/list.html");
     
     return ;
 }
@@ -122,7 +89,6 @@ sub Execute{
 sub ParsePage{
     my $self        = shift;
     my $file_name   = shift;
-    my $e_no        = shift;
 
     #結果の読み込み
     my $content = "";
@@ -136,17 +102,10 @@ sub ParsePage{
     my $tree = HTML::TreeBuilder->new;
     $tree->parse($content);
 
-    my $player_nodes     = &GetNode::GetNode_Tag_Id("h2","player", \$tree);
-    my $charadata_node   = $$player_nodes[0]->right;
-    my $minieffect_nodes = &GetNode::GetNode_Tag_Class("div","minieffect", \$charadata_node);
-    my $status_nodes     = &GetNode::GetNode_Tag_Class("table","charadata", \$tree);
-    $status_nodes = scalar(@$status_nodes) ? $status_nodes : &GetNode::GetNode_Tag_Class("table","charadata2", \$tree);
-    my $spec_data_nodes     = &GetNode::GetNode_Tag_Class("table","specdata", \$tree);
+    my $hr_nodes     = &GetNode::GetNode_Tag("h2", \$tree);
 
     # データリスト取得
-    if(exists($self->{DataHandlers}{Name}))         {$self->{DataHandlers}{Name}->GetData($e_no, $minieffect_nodes)};
-    if(exists($self->{DataHandlers}{Status}))       {$self->{DataHandlers}{Status}->GetData($e_no, $$status_nodes[0])};
-    if(exists($self->{DataHandlers}{FortressData})) {$self->{DataHandlers}{FortressData}->GetData($e_no, $$spec_data_nodes[0])};
+    if(exists($self->{DataHandlers}{NextBattle})) {$self->{DataHandlers}{NextBattle}->GetData($hr_nodes)};
 
     $tree = $tree->delete;
 }
