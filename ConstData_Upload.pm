@@ -26,6 +26,8 @@ use warnings;
         use constant EXE_CHARA_FORTRESS_DATA          => 1;
         use constant EXE_CHARA_FORTRESS_GUARD         => 1;
         use constant EXE_CHARA_CASTLE_CONDITION_TEXT  => 1;
+    use constant EXE_CHARALIST    => 1;
+        use constant EXE_CHARALIST_NEXT_BATTLE  => 1;
     use constant EXE_NEW          => 0;
         use constant EXE_NEW_FUKA            => 1;
     use constant EXE_DATA         => 1;
