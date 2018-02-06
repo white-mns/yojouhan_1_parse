@@ -72,6 +72,10 @@ sub Main {
 		    $upload->DeleteAll("castle_condition_lists");
             $upload->Upload("./output/data/castle_condition.csv", 'castle_condition_lists');
         }
+        if(ConstData::EXE_DATA_FRAME_TYPE)    {
+		    $upload->DeleteAll("frame_type_lists");
+            $upload->Upload("./output/data/frame_type.csv", 'frame_type_lists');
+        }
     }
     if(ConstData::EXE_CHARA){
         if(ConstData::EXE_CHARA_NAME)    {
@@ -97,6 +101,10 @@ sub Main {
         if(ConstData::EXE_CHARA_CASTLE_CONDITION_TEXT)    {
             $upload->DeleteSameResult('castle_condition_texts', $result_no, $generate_no);
             $upload->Upload("./output/chara/castle_condition_text_" . $result_no . "_" . $generate_no . ".csv", 'castle_condition_texts');
+        }
+        if(ConstData::EXE_CHARA_CASTLE_STRUCTURE)    {
+            $upload->DeleteSameResult('castle_structures', $result_no, $generate_no);
+            $upload->Upload("./output/chara/castle_structure_" . $result_no . "_" . $generate_no . ".csv", 'castle_structures');
         }
     }
     if(ConstData::EXE_CHARALIST){

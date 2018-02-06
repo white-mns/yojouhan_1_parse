@@ -26,7 +26,8 @@ use warnings;
         use constant EXE_CHARA_FORTRESS_DATA          => 1;
         use constant EXE_CHARA_FORTRESS_GUARD         => 1;
         use constant EXE_CHARA_CASTLE_CONDITION_TEXT  => 1;
-    use constant EXE_CHARALIST    => 1;
+        use constant EXE_CHARA_CASTLE_STRUCTURE       => 1;
+    use constant EXE_CHARALIST    => 0;
         use constant EXE_CHARALIST_NEXT_BATTLE  => 1;
     use constant EXE_NEW          => 0;
         use constant EXE_NEW_FUKA            => 1;
@@ -37,6 +38,8 @@ use warnings;
         use constant EXE_DATA_ELEMENTAL         => 1;
         use constant EXE_DATA_REGALIA           => 1;
         use constant EXE_DATA_CASTLE_CONDITION  => 1;
+        use constant EXE_DATA_FRAME_TYPE        => 1;
+
 
     use constant SAVE_SAMEDATA    => 0;    # 0=>上書き 1=>再更新
     use constant GENERATE_NO      => 0;    # 0=>上書き 1=>再更新
