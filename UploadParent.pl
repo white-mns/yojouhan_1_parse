@@ -106,6 +106,10 @@ sub Main {
             $upload->DeleteSameResult('castle_structures', $result_no, $generate_no);
             $upload->Upload("./output/chara/castle_structure_" . $result_no . "_" . $generate_no . ".csv", 'castle_structures');
         }
+        if(ConstData::EXE_CHARA_CASTLE_STRUCTURE_MAJOR_TYPE_NUM)    {
+            $upload->DeleteSameResult('castle_structure_major_type_nums', $result_no, $generate_no);
+            $upload->Upload("./output/chara/castle_structure_major_type_num_" . $result_no . "_" . $generate_no . ".csv", 'castle_structure_major_type_nums');
+        }
     }
     if(ConstData::EXE_CHARALIST){
         if(ConstData::EXE_CHARALIST_NEXT_BATTLE)    {

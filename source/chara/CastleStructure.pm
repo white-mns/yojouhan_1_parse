@@ -39,7 +39,6 @@ sub Init(){
     ($self->{ResultNo}, $self->{GenerateNo}, $self->{CommonDatas}) = @_;
     
     #初期化
-    my $data = StoreData->new();
     my @headerList = (
                 "result_no",
                 "generate_no",
@@ -48,11 +47,24 @@ sub Init(){
                 "i_no",
     );
 
-    $self->{Datas}{CastleStructure}  = $data;
+    $self->{Datas}{CastleStructure}  = StoreData->new();
     $self->{Datas}{CastleStructure}->Init(\@headerList);
+    
+    @headerList = (
+                "result_no",
+                "generate_no",
+                "e_no",
+                "build_num",
+                "guard_num",
+                "goods_num",
+    );
+
+    $self->{Datas}{CastleStructureMajorTypeNum}  = StoreData->new();
+    $self->{Datas}{CastleStructureMajorTypeNum}->Init(\@headerList);
     
     #出力ファイル設定
     $self->{Datas}{CastleStructure}->SetOutputName( "./output/chara/castle_structure_" . $self->{ResultNo} . "_" . $self->{GenerateNo} . ".csv" );
+    $self->{Datas}{CastleStructureMajorTypeNum}->SetOutputName( "./output/chara/castle_structure_major_type_num_" . $self->{ResultNo} . "_" . $self->{GenerateNo} . ".csv" );
     return;
 }
 
@@ -84,6 +96,8 @@ sub GetCastleStructureData{
     my $self = shift;
     my $machine_data_node  = shift;
     my $item_caption_node = shift;
+    
+    my ($build_num, $guard_num, $goods_num) = (0, 0, 0);
 
     my $tr_nodes = &GetNode::GetNode_Tag("tr", \$machine_data_node);
     foreach my $tr_node (@$tr_nodes){
@@ -104,8 +118,16 @@ sub GetCastleStructureData{
 
         my @datas=($self->{ResultNo}, $self->{GenerateNo}, $self->{ENo}, $frame_type, $i_no);
         $self->{Datas}{CastleStructure}->AddData(join(ConstData::SPLIT, @datas));
+
+        $build_num += ($th_text =~ /建築/) ? 1 : 0;
+        $guard_num += ($th_text =~ /護衛/) ? 1 : 0;
+        $goods_num += ($th_text =~ /商品/) ? 1 : 0;
+
     }
 
+    my @datas=($self->{ResultNo}, $self->{GenerateNo}, $self->{ENo}, $build_num, $guard_num, $goods_num);
+    $self->{Datas}{CastleStructure}->AddData(join(ConstData::SPLIT, @datas));
+    $self->{Datas}{CastleStructureMajorTypeNum}->AddData(join(ConstData::SPLIT, @datas));
     return;
 }
 
