@@ -28,6 +28,7 @@ use warnings;
         use constant EXE_CHARA_CASTLE_CONDITION_TEXT           => 1;
         use constant EXE_CHARA_CASTLE_STRUCTURE                => 1;
         use constant EXE_CHARA_CASTLE_STRUCTURE_MAJOR_TYPE_NUM => 1;
+        use constant EXE_CHARA_PAYOFF                          => 1;
     use constant EXE_CHARALIST    => 1;
         use constant EXE_CHARALIST_NEXT_BATTLE  => 1;
     use constant EXE_NEW          => 0;

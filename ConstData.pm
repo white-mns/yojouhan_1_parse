@@ -26,6 +26,8 @@ use warnings;
         use constant EXE_CHARA_STATUS           => 1;
         use constant EXE_CHARA_FORTRESS_DATA    => 1;
         use constant EXE_CHARA_CASTLE_STRUCTURE => 1;
+        use constant EXE_CHARA_CASTLE_STRUCTURE => 1;
+        use constant EXE_CHARA_PAYOFF           => 1;
     use constant EXE_TSV        => 0;
         use constant EXE_TSV_UNITDATA  => 1;
     use constant EXE_CHARALIST  => 0;

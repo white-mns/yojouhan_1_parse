@@ -110,6 +110,10 @@ sub Main {
             $upload->DeleteSameResult('castle_structure_major_type_nums', $result_no, $generate_no);
             $upload->Upload("./output/chara/castle_structure_major_type_num_" . $result_no . "_" . $generate_no . ".csv", 'castle_structure_major_type_nums');
         }
+        if(ConstData::EXE_CHARA_PAYOFF)    {
+            $upload->DeleteSameResult('payoffs', $result_no, $generate_no);
+            $upload->Upload("./output/chara/payoff_" . $result_no . "_" . $generate_no . ".csv", 'payoffs');
+        }
     }
     if(ConstData::EXE_CHARALIST){
         if(ConstData::EXE_CHARALIST_NEXT_BATTLE)    {
