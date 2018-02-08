@@ -49,7 +49,7 @@ sub Init(){
                 "attack",
                 "support",
                 "defense",
-                "destroy",
+                "defeat",
                 "selling",
                 "income",
                 "spending",
