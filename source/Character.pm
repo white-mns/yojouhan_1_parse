@@ -21,6 +21,8 @@ require "./source/lib/NumCode.pm";
 require "./source/chara/Name.pm";
 require "./source/chara/Status.pm";
 require "./source/chara/FortressData.pm";
+require "./source/chara/CastleStructure.pm";
+require "./source/chara/Payoff.pm";
 
 use ConstData;        #定数呼び出し
 
@@ -54,9 +56,11 @@ sub Init(){
     $self->{ResultNo0} = sprintf("%03d", $self->{ResultNo});
 
     #インスタンス作成
-    if(ConstData::EXE_CHARA_NAME)          { $self->{DataHandlers}{Name}         = Name->new();}
-    if(ConstData::EXE_CHARA_STATUS)        { $self->{DataHandlers}{Status}       = Status->new();}
-    if(ConstData::EXE_CHARA_FORTRESS_DATA) { $self->{DataHandlers}{FortressData} = FortressData->new();}
+    if(ConstData::EXE_CHARA_NAME)             { $self->{DataHandlers}{Name}            = Name->new();}
+    if(ConstData::EXE_CHARA_STATUS)           { $self->{DataHandlers}{Status}          = Status->new();}
+    if(ConstData::EXE_CHARA_FORTRESS_DATA)    { $self->{DataHandlers}{FortressData}    = FortressData->new();}
+    if(ConstData::EXE_CHARA_CASTLE_STRUCTURE) { $self->{DataHandlers}{CastleStructure} = CastleStructure->new();}
+    if(ConstData::EXE_CHARA_PAYOFF)           { $self->{DataHandlers}{Payoff}          = Payoff->new();}
 
     #初期化処理
     foreach my $object( values %{ $self->{DataHandlers} } ) {
@@ -141,12 +145,17 @@ sub ParsePage{
     my $minieffect_nodes = &GetNode::GetNode_Tag_Class("div","minieffect", \$charadata_node);
     my $status_nodes     = &GetNode::GetNode_Tag_Class("table","charadata", \$tree);
     $status_nodes = scalar(@$status_nodes) ? $status_nodes : &GetNode::GetNode_Tag_Class("table","charadata2", \$tree);
-    my $spec_data_nodes     = &GetNode::GetNode_Tag_Class("table","specdata", \$tree);
+    my $spec_data_nodes    = &GetNode::GetNode_Tag_Class("table","specdata", \$tree);
+    my $machine_data_nodes = &GetNode::GetNode_Tag_Class("table","machinedata", \$tree);
+    my $item_caption_nodes = &GetNode::GetNode_Tag_Id("div","item", \$tree);
+    my $nextday_h2_nodes   = &GetNode::GetNode_Tag_Id("h2","nextday", \$tree);
 
     # データリスト取得
-    if(exists($self->{DataHandlers}{Name}))         {$self->{DataHandlers}{Name}->GetData($e_no, $minieffect_nodes)};
-    if(exists($self->{DataHandlers}{Status}))       {$self->{DataHandlers}{Status}->GetData($e_no, $$status_nodes[0])};
-    if(exists($self->{DataHandlers}{FortressData})) {$self->{DataHandlers}{FortressData}->GetData($e_no, $$spec_data_nodes[0])};
+    if(exists($self->{DataHandlers}{Name}))            {$self->{DataHandlers}{Name}->GetData($e_no, $minieffect_nodes)};
+    if(exists($self->{DataHandlers}{Status}))          {$self->{DataHandlers}{Status}->GetData($e_no, $$status_nodes[0])};
+    if(exists($self->{DataHandlers}{FortressData}))    {$self->{DataHandlers}{FortressData}->GetData($e_no, $$spec_data_nodes[0])};
+    if(exists($self->{DataHandlers}{CastleStructure})) {$self->{DataHandlers}{CastleStructure}->GetData($e_no, $$machine_data_nodes[0], $$item_caption_nodes[0])};
+    if(exists($self->{DataHandlers}{Payoff}))          {$self->{DataHandlers}{Payoff}->GetData($e_no, $$nextday_h2_nodes[0]->right)};
 
     $tree = $tree->delete;
 }

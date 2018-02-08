@@ -72,6 +72,10 @@ sub Main {
 		    $upload->DeleteAll("castle_condition_lists");
             $upload->Upload("./output/data/castle_condition.csv", 'castle_condition_lists');
         }
+        if(ConstData::EXE_DATA_FRAME_TYPE)    {
+		    $upload->DeleteAll("frame_type_lists");
+            $upload->Upload("./output/data/frame_type.csv", 'frame_type_lists');
+        }
     }
     if(ConstData::EXE_CHARA){
         if(ConstData::EXE_CHARA_NAME)    {
@@ -97,6 +101,18 @@ sub Main {
         if(ConstData::EXE_CHARA_CASTLE_CONDITION_TEXT)    {
             $upload->DeleteSameResult('castle_condition_texts', $result_no, $generate_no);
             $upload->Upload("./output/chara/castle_condition_text_" . $result_no . "_" . $generate_no . ".csv", 'castle_condition_texts');
+        }
+        if(ConstData::EXE_CHARA_CASTLE_STRUCTURE)    {
+            $upload->DeleteSameResult('castle_structures', $result_no, $generate_no);
+            $upload->Upload("./output/chara/castle_structure_" . $result_no . "_" . $generate_no . ".csv", 'castle_structures');
+        }
+        if(ConstData::EXE_CHARA_CASTLE_STRUCTURE_MAJOR_TYPE_NUM)    {
+            $upload->DeleteSameResult('castle_structure_major_type_nums', $result_no, $generate_no);
+            $upload->Upload("./output/chara/castle_structure_major_type_num_" . $result_no . "_" . $generate_no . ".csv", 'castle_structure_major_type_nums');
+        }
+        if(ConstData::EXE_CHARA_PAYOFF)    {
+            $upload->DeleteSameResult('payoffs', $result_no, $generate_no);
+            $upload->Upload("./output/chara/payoff_" . $result_no . "_" . $generate_no . ".csv", 'payoffs');
         }
     }
     if(ConstData::EXE_CHARALIST){

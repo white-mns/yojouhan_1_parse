@@ -58,6 +58,7 @@ sub Init(){
     $self->{DataHandlers}{Elemental}       = StoreProperName->new();
     $self->{DataHandlers}{Regalia}         = StoreProperName->new();
     $self->{DataHandlers}{CastleCondition} = StoreProperName->new();
+    $self->{DataHandlers}{FrameType}       = StoreProperName->new();
 
     #他パッケージへの引き渡し用インスタンス
     $self->{CommonDatas}{UnitType}        = $self->{DataHandlers}{UnitType};
@@ -66,6 +67,7 @@ sub Init(){
     $self->{CommonDatas}{Elemental}       = $self->{DataHandlers}{Elemental};
     $self->{CommonDatas}{Regalia}         = $self->{DataHandlers}{Regalia};
     $self->{CommonDatas}{CastleCondition} = $self->{DataHandlers}{CastleCondition};
+    $self->{CommonDatas}{FrameType}       = $self->{DataHandlers}{FrameType};
 
     my $header_list = "";
     my $output_file = "";
@@ -111,6 +113,13 @@ sub Init(){
     ];
     $output_file = "./output/data/". "castle_condition" . ".csv";
     $self->{DataHandlers}{CastleCondition}->Init($header_list, $output_file, " ");
+
+    $header_list = [
+                "frame_type_id",
+                "name",
+    ];
+    $output_file = "./output/data/". "frame_type" . ".csv";
+    $self->{DataHandlers}{FrameType}->Init($header_list, $output_file, " ");
 
     return;
 }
