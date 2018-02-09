@@ -126,7 +126,6 @@ sub GetCastleStructureData{
     }
 
     my @datas=($self->{ResultNo}, $self->{GenerateNo}, $self->{ENo}, $build_num, $guard_num, $goods_num);
-    $self->{Datas}{CastleStructure}->AddData(join(ConstData::SPLIT, @datas));
     $self->{Datas}{CastleStructureMajorTypeNum}->AddData(join(ConstData::SPLIT, @datas));
     return;
 }
