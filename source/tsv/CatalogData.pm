@@ -135,8 +135,7 @@ sub GetUnitData{
     $enthusiasm = $$data[13];
     $goodwill = $$data[14];
     $charge = $$data[34];
-    $fuka1 = ($$data[18]) ? $self->{CommonDatas}{AddEffect}->GetOrAddId($$data[18]) : 0;
-    $tokushu = 0;
+    $tokushu = ($$data[18]) ? $self->{CommonDatas}{AddEffect}->GetOrAddId($$data[18]) : 0;
     $fuka1 = ($$data[30]) ? $self->{CommonDatas}{Fuka}->GetOrAddId($$data[30]) : 0;
     $fuka2 = ($$data[31]) ? $self->{CommonDatas}{Fuka}->GetOrAddId($$data[31]) : 0;
     $strength = $$data[21];
