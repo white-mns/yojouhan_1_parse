@@ -121,6 +121,10 @@ sub Main {
             $upload->Upload("./output/charalist/next_battle_" . $result_no . "_" . $generate_no . ".csv", 'next_battles');
         }
     }
+    if(ConstData::EXE_MARKET)    {
+        $upload->DeleteSameResult('markets', $result_no, $generate_no);
+        $upload->Upload("./output/market/catalog_" . $result_no . "_" . $generate_no . ".csv", 'markets');
+    }
     if(ConstData::EXE_NEW){
         if(ConstData::EXE_NEW_FUKA)    {
             $upload->DeleteSameResult('new_fukas', $result_no, $generate_no);
