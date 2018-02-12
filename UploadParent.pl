@@ -76,6 +76,10 @@ sub Main {
 		    $upload->DeleteAll("frame_type_lists");
             $upload->Upload("./output/data/frame_type.csv", 'frame_type_lists');
         }
+        if(ConstData::EXE_DATA_ADD_EFFECT)    {
+		    $upload->DeleteAll("add_effect_lists");
+            $upload->Upload("./output/data/add_effect.csv", 'add_effect_lists');
+        }
     }
     if(ConstData::EXE_CHARA){
         if(ConstData::EXE_CHARA_NAME)    {
@@ -120,6 +124,10 @@ sub Main {
             $upload->DeleteSameResult('next_battles', $result_no, $generate_no);
             $upload->Upload("./output/charalist/next_battle_" . $result_no . "_" . $generate_no . ".csv", 'next_battles');
         }
+    }
+    if(ConstData::EXE_MARKET)    {
+        $upload->DeleteSameResult('markets', $result_no, $generate_no);
+        $upload->Upload("./output/market/catalog_" . $result_no . "_" . $generate_no . ".csv", 'markets');
     }
     if(ConstData::EXE_NEW){
         if(ConstData::EXE_NEW_FUKA)    {

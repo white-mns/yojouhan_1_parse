@@ -18,6 +18,7 @@ require "./source/lib/time.pm";
 require "./source/lib/NumCode.pm";
 
 require "./source/tsv/UnitData.pm";
+require "./source/tsv/CatalogData.pm";
 
 use ConstData;        #定数呼び出し
 
@@ -51,7 +52,8 @@ sub Init(){
     $self->{ResultNo0} = sprintf("%03d", $self->{ResultNo});
 
     #インスタンス作成
-    if(ConstData::EXE_TSV_UNITDATA)  {$self->{DataHandlers}{UnitData} = UnitData->new();}
+    if(ConstData::EXE_TSV_UNITDATA)    {$self->{DataHandlers}{UnitData}    = UnitData->new();}
+    if(ConstData::EXE_TSV_CATALOGDATA) {$self->{DataHandlers}{CatalogData} = CatalogData->new();}
 
     #初期化処理
     foreach my $object( values %{ $self->{DataHandlers} } ) {
@@ -93,7 +95,8 @@ sub ReadTsvDatas{
     my $directory   = shift;
 
     # データリスト取得
-    if(exists($self->{DataHandlers}{UnitData}))         {$self->{DataHandlers}{UnitData}->GetData($directory."/UNIT_DATA.tsv")};
+    if(exists($self->{DataHandlers}{UnitData}))    {$self->{DataHandlers}{UnitData}->GetData($directory."/UNIT_DATA.tsv")};
+    if(exists($self->{DataHandlers}{CatalogData})) {$self->{DataHandlers}{CatalogData}->GetData($directory."/CATALOG_DATA.tsv")};
 }
 
 #-----------------------------------#

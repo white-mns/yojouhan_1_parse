@@ -59,6 +59,7 @@ sub Init(){
     $self->{DataHandlers}{Regalia}         = StoreProperName->new();
     $self->{DataHandlers}{CastleCondition} = StoreProperName->new();
     $self->{DataHandlers}{FrameType}       = StoreProperName->new();
+    $self->{DataHandlers}{AddEffect}       = StoreProperName->new();
 
     #他パッケージへの引き渡し用インスタンス
     $self->{CommonDatas}{UnitType}        = $self->{DataHandlers}{UnitType};
@@ -68,6 +69,7 @@ sub Init(){
     $self->{CommonDatas}{Regalia}         = $self->{DataHandlers}{Regalia};
     $self->{CommonDatas}{CastleCondition} = $self->{DataHandlers}{CastleCondition};
     $self->{CommonDatas}{FrameType}       = $self->{DataHandlers}{FrameType};
+    $self->{CommonDatas}{AddEffect}       = $self->{DataHandlers}{AddEffect};
 
     my $header_list = "";
     my $output_file = "";
@@ -120,6 +122,13 @@ sub Init(){
     ];
     $output_file = "./output/data/". "frame_type" . ".csv";
     $self->{DataHandlers}{FrameType}->Init($header_list, $output_file, " ");
+
+    $header_list = [
+                "add_effect_id",
+                "name",
+    ];
+    $output_file = "./output/data/". "add_effect" . ".csv";
+    $self->{DataHandlers}{AddEffect}->Init($header_list, $output_file, " ");
 
     return;
 }
