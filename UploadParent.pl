@@ -76,6 +76,10 @@ sub Main {
 		    $upload->DeleteAll("frame_type_lists");
             $upload->Upload("./output/data/frame_type.csv", 'frame_type_lists');
         }
+        if(ConstData::EXE_DATA_ADD_EFFECT)    {
+		    $upload->DeleteAll("add_effect_lists");
+            $upload->Upload("./output/data/add_effect.csv", 'add_effect_lists');
+        }
     }
     if(ConstData::EXE_CHARA){
         if(ConstData::EXE_CHARA_NAME)    {
