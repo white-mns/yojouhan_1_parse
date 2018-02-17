@@ -235,6 +235,7 @@ sub GetCastleConditionData{
                 my $text = ($child =~ /HASH/) ? $child->as_text : $child;
                 
                 if(!($text && $text ne " ")){ next;}
+                if($text =~ /付加発動/)     { last;}
                 $self->{CommonDatas}{CastleCondition}->GetOrAddId($text);
                 $condition_text .= ($text && $text ne " ") ? "$text," : "";
             }
