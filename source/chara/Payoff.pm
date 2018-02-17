@@ -50,6 +50,7 @@ sub Init(){
                 "support",
                 "defense",
                 "defeat",
+                "special",
                 "selling",
                 "income",
                 "spending",
@@ -89,7 +90,7 @@ sub GetData{
 sub GetPayoffData{
     my $self  = shift;
     my $payoff_node  = shift;
-    my ($mob, $payoff, $attack, $support, $defense, $destroy, $selling, $income, $spending, $profit, $loss) = (0, 0, 0, 0, 0, 0, 0, 0, 0);
+    my ($mob, $payoff, $attack, $support, $defense, $destroy, $special, $selling, $income, $spending, $profit, $loss) = (0, 0, 0, 0, 0, 0, 0, 0, 0);
 
     my @payoff_children = $payoff_node->content_list;
 
@@ -122,6 +123,11 @@ sub GetPayoffData{
             $text =~ s/(％$|％(MAX)$)//g;
             $destroy = $text;
 
+        }elsif($payoff_child =~ /特別補正/){
+            my $text = $payoff_children[$i+1]->as_text;
+            $text =~ s/(％$|％(MAX)$)//g;
+            $special = $text;
+
         }elsif($payoff_child =~ /販売数補正/){
             my $text = $payoff_children[$i+1]->as_text;
             $text =~ s/(％$|％(MAX)$)//g;
@@ -141,7 +147,7 @@ sub GetPayoffData{
         }
     }
 
-    my @datas=($self->{ResultNo}, $self->{GenerateNo}, $self->{ENo}, $mob, $payoff, $attack, $support, $defense, $destroy, $selling, $income, $spending, $profit, $loss);
+    my @datas=($self->{ResultNo}, $self->{GenerateNo}, $self->{ENo}, $mob, $payoff, $attack, $support, $defense, $destroy, $special, $selling, $income, $spending, $profit, $loss);
     $self->{Datas}{Data}->AddData(join(ConstData::SPLIT, @datas));
 
     return;
