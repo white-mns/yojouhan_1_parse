@@ -48,6 +48,7 @@ sub Init(){
                 "e_no",
                 "battle_no",
                 "multiple_buying",
+                "buy_num",
     );
 
     $self->{Datas}{Data}  = $data;
@@ -85,6 +86,7 @@ sub GetMultipleBuyingData{
 
     foreach my $shop_size_div_node (@$shop_size_div_nodes){
         my $e_no = 0;
+        my $multiple_buying = -1;
         my @shop_size_children = $shop_size_div_node->content_list();
 
         foreach my $shop_size_child (@shop_size_children){
@@ -96,10 +98,26 @@ sub GetMultipleBuyingData{
 
             # 多重購入判定数の取得
             if($shop_size_child =~ /\[多重購入\+(\d+)\]/) {
-                my $multiple_buying = $1;
+                $multiple_buying = $1;
+            }
+
+            # 販売数の取得
+            if($shop_size_child =~ /を(\d+)個販売/) {
+                my $buy_num = $1;
     
-                if($e_no > 0){
-                    my @datas=($self->{ResultNo}, $self->{GenerateNo}, $e_no, $self->{BattleNo}, $multiple_buying);
+                if($e_no > 0 && $multiple_buying >= 0){
+                    my @datas=($self->{ResultNo}, $self->{GenerateNo}, $e_no, $self->{BattleNo}, $multiple_buying, $buy_num);
+                    $self->{Datas}{Data}->AddData(join(ConstData::SPLIT, @datas));
+                }
+                last;
+            }
+    
+            # サービス回数の取得
+            if($shop_size_child =~ /に(\d+)回/) {
+                my $buy_num = $1;
+    
+                if($e_no > 0 && $multiple_buying >= 0){
+                    my @datas=($self->{ResultNo}, $self->{GenerateNo}, $e_no, $self->{BattleNo}, $multiple_buying, $buy_num);
                     $self->{Datas}{Data}->AddData(join(ConstData::SPLIT, @datas));
                 }
                 last;
