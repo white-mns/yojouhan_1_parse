@@ -102,10 +102,12 @@ sub ParsePage{
     my $tree = HTML::TreeBuilder->new;
     $tree->parse($content);
 
-    my $hr_nodes     = &GetNode::GetNode_Tag("h2", \$tree);
+    my $hr_nodes    = &GetNode::GetNode_Tag("h2", \$tree);
+    my $link_nodes  = &GetNode::GetNode_Tag("a", \$tree);
 
     # データリスト取得
     if(exists($self->{DataHandlers}{NextBattle})) {$self->{DataHandlers}{NextBattle}->GetData($hr_nodes)};
+    if(exists($self->{CommonDatas}{Megane}))      {$self->{CommonDatas}{Megane}->GetMessageData("list",0,$link_nodes)};
 
     $tree = $tree->delete;
 }

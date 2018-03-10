@@ -32,6 +32,7 @@ use warnings;
     use constant EXE_CHARALIST    => 1;
         use constant EXE_CHARALIST_NEXT_BATTLE  => 1;
     use constant EXE_MARKET       => 1;
+    use constant EXE_MEGANE       => 1;
     use constant EXE_NEW          => 0;
         use constant EXE_NEW_FUKA            => 1;
     use constant EXE_DATA         => 1;
