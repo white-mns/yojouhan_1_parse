@@ -60,7 +60,7 @@ sub Init(){
     $self->{DataHandlers}{CastleCondition} = StoreProperName->new();
     $self->{DataHandlers}{FrameType}       = StoreProperName->new();
     $self->{DataHandlers}{AddEffect}       = StoreProperName->new();
-    $self->{DataHandlers}{MeganeType}         = StoreProperName->new();
+    $self->{DataHandlers}{MeganeType}      = StoreProperName->new();
 
     #他パッケージへの引き渡し用インスタンス
     $self->{CommonDatas}{UnitType}        = $self->{DataHandlers}{UnitType};
@@ -138,7 +138,7 @@ sub Init(){
     ];
     $output_file = "./output/data/". "megane_type" . ".csv";
     $self->{DataHandlers}{MeganeType}->Init($header_list, $output_file, " ");
-
+    
     return;
 }
 

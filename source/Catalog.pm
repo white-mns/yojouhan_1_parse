@@ -1,5 +1,5 @@
 #===================================================================
-#        キャラリスト解析パッケージ
+#        パーツカタログ解析パッケージ
 #-------------------------------------------------------------------
 #            (C) 2018 @white_mns
 #===================================================================
@@ -25,7 +25,7 @@ use ConstData;        #定数呼び出し
 #------------------------------------------------------------------#
 #    パッケージの定義
 #------------------------------------------------------------------#
-package CharacterList;
+package Catalog;
 
 #-----------------------------------#
 #    コンストラクタ
@@ -52,7 +52,6 @@ sub Init(){
     $self->{ResultNo0} = sprintf("%03d", $self->{ResultNo});
 
     #インスタンス作成
-    if(ConstData::EXE_CHARALIST_NEXT_BATTLE) { $self->{DataHandlers}{NextBattle} = NextBattle->new();}
 
     #初期化処理
     foreach my $object( values %{ $self->{DataHandlers} } ) {
@@ -63,19 +62,19 @@ sub Init(){
 }
 
 #-----------------------------------#
-#    圧縮結果から詳細データファイルを抽出
+#    圧縮結果からカタログファイルを抽出
 #-----------------------------------#
 #    
 #-----------------------------------#
 sub Execute{
     my $self        = shift;
 
-    print "read characte list files...\n";
+    print "read catalog files...\n";
 
     my $directory = './data/utf/' . $self->{ResultNo0};
     $directory .= ($self->{GenerateNo} == 0) ? '' :  '_' . $self->{GenerateNo};
                 
-    $self->ParsePage($directory  . "/list.html");
+    $self->ParsePage($directory  . "/RESULT/catalog.html");
     
     return ;
 }
@@ -102,12 +101,10 @@ sub ParsePage{
     my $tree = HTML::TreeBuilder->new;
     $tree->parse($content);
 
-    my $hr_nodes    = &GetNode::GetNode_Tag("h2", \$tree);
     my $link_nodes  = &GetNode::GetNode_Tag("a", \$tree);
 
     # データリスト取得
-    if(exists($self->{DataHandlers}{NextBattle})) {$self->{DataHandlers}{NextBattle}->GetData($hr_nodes)};
-    if(exists($self->{CommonDatas}{Megane}))      {$self->{CommonDatas}{Megane}->GetMessageData($self->{CommonDatas}{PageType}{list},0,$link_nodes)};
+    if(exists($self->{CommonDatas}{Megane}))      {$self->{CommonDatas}{Megane}->GetMessageData($self->{CommonDatas}{PageType}{catalog},0,$link_nodes)};
 
     $tree = $tree->delete;
 }

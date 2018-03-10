@@ -1,5 +1,5 @@
 #===================================================================
-#        PC名、愛称取得パッケージ
+#        多重購入回数取得パッケージ
 #-------------------------------------------------------------------
 #            (C) 2018 @white_mns
 #===================================================================
@@ -17,7 +17,7 @@ use source::lib::GetNode;
 #------------------------------------------------------------------#
 #    パッケージの定義
 #------------------------------------------------------------------#     
-package Name;
+package MultipleBuying;
 
 #-----------------------------------#
 #    コンストラクタ
@@ -46,15 +46,16 @@ sub Init(){
                 "result_no",
                 "generate_no",
                 "e_no",
-                "name",
-                "nickname",
+                "battle_no",
+                "multiple_buying",
+                "buy_num",
     );
 
     $self->{Datas}{Data}  = $data;
     $self->{Datas}{Data}->Init(\@headerList);
     
     #出力ファイル設定
-    $self->{Datas}{Data}->SetOutputName( "./output/chara/name_" . $self->{ResultNo} . "_" . $self->{GenerateNo} . ".csv" );
+    $self->{Datas}{Data}->SetOutputName( "./output/battle/multiple_buying_" . $self->{ResultNo} . "_" . $self->{GenerateNo} . ".csv" );
     return;
 }
 
@@ -65,35 +66,64 @@ sub Init(){
 #-----------------------------------#
 sub GetData{
     my $self = shift;
-    my $e_no  = shift;
-    my $minieffect_nodes = shift;
+    my $battle_no  = shift;
+    my $shop_size_div_nodes = shift;
     
-    $self->{ENo} = $e_no;
+    $self->{BattleNo} = $battle_no;
 
-    $self->GetNameData($minieffect_nodes);
+    $self->GetMultipleBuyingData($shop_size_div_nodes);
     
     return;
 }
 #-----------------------------------#
-#    名前データ取得
+#    多重購入データ取得
 #------------------------------------
 #    引数｜名前データノード
 #-----------------------------------#
-sub GetNameData{
+sub GetMultipleBuyingData{
     my $self  = shift;
-    my $minieffect_nodes  = shift;
+    my $shop_size_div_nodes  = shift;
 
-    my $name = $$minieffect_nodes[0]->right->as_text;
+    foreach my $shop_size_div_node (@$shop_size_div_nodes){
+        my $e_no = 0;
+        my $multiple_buying = -1;
+        my @shop_size_children = $shop_size_div_node->content_list();
 
-    my $nickname = $$minieffect_nodes[1]->right;
-    $nickname =~ s/^　//;
-    $nickname =~ s/\s$//;
+        foreach my $shop_size_child (@shop_size_children){
+            # Enoデータの取得
+            if($shop_size_child =~ /HASH/ && $shop_size_child->tag eq "span") { 
+                my $span_title = $shop_size_child->attr("title");
+                if( $span_title && $span_title =~ /Eno(\d+)-/) {$e_no = $1};
+            }
 
-    my @datas=($self->{ResultNo}, $self->{GenerateNo}, $self->{ENo}, $name, $nickname);
-    $self->{Datas}{Data}->AddData(join(ConstData::SPLIT, @datas));
+            # 多重購入判定数の取得
+            if($shop_size_child =~ /\[多重購入\+(\d+)\]/) {
+                $multiple_buying = $1;
+            }
 
-    # 戦闘ページでの眼鏡ｸｲｯ発言者判定用に、共通変数へ愛称とEnoの対応を記録
-    $self->{CommonDatas}{NickName}{$nickname} = $self->{ENo};
+            # 販売数の取得
+            if($shop_size_child =~ /を(\d+)個販売/) {
+                my $buy_num = $1;
+    
+                if($e_no > 0 && $multiple_buying >= 0){
+                    my @datas=($self->{ResultNo}, $self->{GenerateNo}, $e_no, $self->{BattleNo}, $multiple_buying, $buy_num);
+                    $self->{Datas}{Data}->AddData(join(ConstData::SPLIT, @datas));
+                }
+                last;
+            }
+    
+            # サービス回数の取得
+            if($shop_size_child =~ /に(\d+)回/) {
+                my $buy_num = $1;
+    
+                if($e_no > 0 && $multiple_buying >= 0){
+                    my @datas=($self->{ResultNo}, $self->{GenerateNo}, $e_no, $self->{BattleNo}, $multiple_buying, $buy_num);
+                    $self->{Datas}{Data}->AddData(join(ConstData::SPLIT, @datas));
+                }
+                last;
+            }
+        }
+    }
 
     return;
 }
@@ -106,10 +136,6 @@ sub GetNameData{
 sub Output(){
     my $self = shift;
     
-    # 眼鏡ｸｲｯ一覧のためにNPC、判別不能時の名前データを追加する
-    $self->{Datas}{Data}->AddData(join(ConstData::SPLIT, ($self->{ResultNo}, $self->{GenerateNo}, 10000, "判別不能", "判別不能")));
-    $self->{Datas}{Data}->AddData(join(ConstData::SPLIT, ($self->{ResultNo}, $self->{GenerateNo}, 10001, "レヒル主任", "レヒル主任")));
-
     foreach my $object( values %{ $self->{Datas} } ) {
         $object->Output();
     }

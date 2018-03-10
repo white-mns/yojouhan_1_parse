@@ -1,5 +1,5 @@
 #===================================================================
-#        キャラステータス解析パッケージ
+#        戦闘ページ解析パッケージ
 #-------------------------------------------------------------------
 #            (C) 2018 @white_mns
 #===================================================================
@@ -18,18 +18,14 @@ require "./source/lib/IO.pm";
 require "./source/lib/time.pm";
 require "./source/lib/NumCode.pm";
 
-require "./source/chara/Name.pm";
-require "./source/chara/Status.pm";
-require "./source/chara/FortressData.pm";
-require "./source/chara/CastleStructure.pm";
-require "./source/chara/Payoff.pm";
+require "./source/battle/MultipleBuying.pm";
 
 use ConstData;        #定数呼び出し
 
 #------------------------------------------------------------------#
 #    パッケージの定義
 #------------------------------------------------------------------#
-package Character;
+package Battle;
 
 #-----------------------------------#
 #    コンストラクタ
@@ -56,11 +52,7 @@ sub Init(){
     $self->{ResultNo0} = sprintf("%03d", $self->{ResultNo});
 
     #インスタンス作成
-    if(ConstData::EXE_CHARA_NAME)             { $self->{DataHandlers}{Name}            = Name->new();}
-    if(ConstData::EXE_CHARA_STATUS)           { $self->{DataHandlers}{Status}          = Status->new();}
-    if(ConstData::EXE_CHARA_FORTRESS_DATA)    { $self->{DataHandlers}{FortressData}    = FortressData->new();}
-    if(ConstData::EXE_CHARA_CASTLE_STRUCTURE) { $self->{DataHandlers}{CastleStructure} = CastleStructure->new();}
-    if(ConstData::EXE_CHARA_PAYOFF)           { $self->{DataHandlers}{Payoff}          = Payoff->new();}
+    if(ConstData::EXE_BATTLE_MULTIPLE_BUYING) { $self->{DataHandlers}{MultipleBuying} = MultipleBuying->new();}
 
     #初期化処理
     foreach my $object( values %{ $self->{DataHandlers} } ) {
@@ -78,7 +70,7 @@ sub Init(){
 sub Execute{
     my $self        = shift;
 
-    print "read character files...\n";
+    print "read battle files...\n";
 
     my $start = 1;
     my $end   = 0;
@@ -87,18 +79,17 @@ sub Execute{
     $directory .= '/RESULT';
     if(ConstData::EXE_ALLRESULT){
         #結果全解析
-        my @file_list = grep { -f } glob("$directory/c*.html");
+        my @file_list = grep { -f } glob("$directory/battle*.html");
         my $i = 0;
         foreach my $file_adr (@file_list){
-            if($file_adr =~ /catalog/) {next};
             $i++;
             if($i % 10 == 0){print $i . "\n"};
 
-            $file_adr =~ /c(.*?)\.html/;
+            $file_adr =~ /battle(.*?)\.html/;
             my $file_name = $1;
-            my $e_no = $file_name+0;
+            my $battle_no = $file_name+0;
             
-            $self->ParsePage($directory  . "/c" . $file_name . ".html", $e_no);
+            $self->ParsePage($directory  . "/battle" . $file_name . ".html", $battle_no);
         }
     }else{
         #指定範囲解析
@@ -108,8 +99,8 @@ sub Execute{
 
         for(my $i=$start; $i<=$end; $i++){
             if($i % 10 == 0){print $i . "\n"};
-            my $i0 = sprintf("%04d", $i);
-            $self->ParsePage($directory  . "/c" . $i0 . ".html",$i);
+            my $i0 = sprintf("%d", $i);
+            $self->ParsePage($directory  . "/battle" . $i0 . ".html",$i);
         }
     }
 
@@ -126,7 +117,7 @@ sub Execute{
 sub ParsePage{
     my $self        = shift;
     my $file_name   = shift;
-    my $e_no        = shift;
+    my $battle_no   = shift;
 
     #結果の読み込み
     my $content = "";
@@ -140,26 +131,13 @@ sub ParsePage{
     my $tree = HTML::TreeBuilder->new;
     $tree->parse($content);
 
-    my $player_nodes     = &GetNode::GetNode_Tag_Id("h2","player", \$tree);
-    my $charadata_node   = $$player_nodes[0]->right;
-    my $minieffect_nodes = &GetNode::GetNode_Tag_Class("div","minieffect", \$charadata_node);
-    my $status_nodes     = &GetNode::GetNode_Tag_Class("table","charadata", \$tree);
-    $status_nodes = scalar(@$status_nodes) ? $status_nodes : &GetNode::GetNode_Tag_Class("table","charadata2", \$tree);
-    my $spec_data_nodes    = &GetNode::GetNode_Tag_Class("table","specdata", \$tree);
-    my $machine_data_nodes = &GetNode::GetNode_Tag_Class("table","machinedata", \$tree);
-    my $item_caption_nodes = &GetNode::GetNode_Tag_Id("div","item", \$tree);
-    my $nextday_h2_nodes   = &GetNode::GetNode_Tag_Id("h2","nextday", \$tree);
-    my $messe_waku_table_nodes  = &GetNode::GetNode_Tag_Class("table","messe_waku", \$tree);
-    my $link_nodes  = &GetNode::GetNode_Tag("a", \$tree);
+    my $messe_waku_table_nodes = &GetNode::GetNode_Tag_Class("table","messe_waku", \$tree);
+    my $shop_size_div_nodes    = &GetNode::GetNode_Tag_Class("div","shop_size", \$tree);
+    my $messe_span_nodes       = &GetNode::GetNode_Tag_Class("span","messe", \$tree);
 
     # データリスト取得
-    if(exists($self->{DataHandlers}{Name}))            {$self->{DataHandlers}{Name}->GetData($e_no, $minieffect_nodes)};
-    if(exists($self->{DataHandlers}{Status}))          {$self->{DataHandlers}{Status}->GetData($e_no, $$status_nodes[0])};
-    if(exists($self->{DataHandlers}{FortressData}))    {$self->{DataHandlers}{FortressData}->GetData($e_no, $$spec_data_nodes[0])};
-    if(exists($self->{DataHandlers}{CastleStructure})) {$self->{DataHandlers}{CastleStructure}->GetData($e_no, $$machine_data_nodes[0], $$item_caption_nodes[0])};
-    if(exists($self->{DataHandlers}{Payoff}))          {$self->{DataHandlers}{Payoff}->GetData($e_no, $$nextday_h2_nodes[0]->right)};
-    if(exists($self->{CommonDatas}{Megane}))           {$self->{CommonDatas}{Megane}->GetRehiruData($messe_waku_table_nodes)};
-    if(exists($self->{CommonDatas}{Megane}))           {$self->{CommonDatas}{Megane}->GetMessageData($self->{CommonDatas}{PageType}{chara},$e_no,$link_nodes)};
+    if(exists($self->{DataHandlers}{MultipleBuying}))  {$self->{DataHandlers}{MultipleBuying}->GetData($battle_no, $shop_size_div_nodes)};
+    if(exists($self->{CommonDatas}{Megane}))           {$self->{CommonDatas}{Megane}->GetBattleMessageData($self->{CommonDatas}{PageType}{battle}, $battle_no, $messe_waku_table_nodes,$messe_span_nodes)};
 
     $tree = $tree->delete;
 }
