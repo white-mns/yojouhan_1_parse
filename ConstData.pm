@@ -33,5 +33,7 @@ use warnings;
         use constant EXE_TSV_CATALOGDATA  => 1;
     use constant EXE_CHARALIST  => 1;
         use constant EXE_CHARALIST_NEXT_BATTLE => 1;
+    use constant EXE_CATALOG => 1;
+    use constant EXE_BATTLE  => 1;
     use constant EXE_MEGANE  => 1;
 1;

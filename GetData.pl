@@ -11,6 +11,7 @@ require "./source/lib/NumCode.pm";
 require "./source/ProperName.pm";
 require "./source/Character.pm";
 require "./source/CharacterList.pm";
+require "./source/Catalog.pm";
 require "./source/Tsv.pm";
 require "./source/Megane.pm";
 
@@ -54,6 +55,7 @@ sub Main{
     if(ConstData::EXE_TSV)       { push(@objects, Tsv->new());} #tsvファイル読み込み
     if(ConstData::EXE_CHARA)     { push(@objects, Character->new());} #キャラページ読み込み
     if(ConstData::EXE_CHARALIST) { push(@objects, CharacterList->new());} #キャラリストページ読み込み
+    if(ConstData::EXE_CATALOG)   { push(@objects, Catalog->new());} #キャラリストページ読み込み
 
     &Init(\@objects, $result_no, $generate_no, \%common_datas);
     &Execute(\@objects);
