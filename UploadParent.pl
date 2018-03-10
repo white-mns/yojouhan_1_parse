@@ -80,6 +80,10 @@ sub Main {
 		    $upload->DeleteAll("add_effect_lists");
             $upload->Upload("./output/data/add_effect.csv", 'add_effect_lists');
         }
+        if(ConstData::EXE_DATA_MEGANE_TYPE)    {
+		    $upload->DeleteAll("megane_type_lists");
+            $upload->Upload("./output/data/megane_type.csv", 'megane_type_lists');
+        }
     }
     if(ConstData::EXE_CHARA){
         if(ConstData::EXE_CHARA_NAME)    {
@@ -128,6 +132,16 @@ sub Main {
     if(ConstData::EXE_MARKET)    {
         $upload->DeleteSameResult('markets', $result_no, $generate_no);
         $upload->Upload("./output/market/catalog_" . $result_no . "_" . $generate_no . ".csv", 'markets');
+    }
+    if(ConstData::EXE_MEGANE)    {
+        $upload->DeleteSameResult('meganes', $result_no, $generate_no);
+        $upload->Upload("./output/megane/megane_" . $result_no . "_" . $generate_no . ".csv", 'meganes');
+
+        $upload->DeleteSameResult('total_meganes', $result_no, $generate_no);
+        $upload->Upload("./output/megane/total_megane_" . $result_no . "_" . $generate_no . ".csv", 'total_meganes');
+
+        $upload->DeleteSameResult('acc_meganes', $result_no, $generate_no);
+        $upload->Upload("./output/megane/acc_megane_" . $result_no . "_" . $generate_no . ".csv", 'acc_meganes');
     }
     if(ConstData::EXE_NEW){
         if(ConstData::EXE_NEW_FUKA)    {

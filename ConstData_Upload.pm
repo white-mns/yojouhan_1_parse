@@ -32,6 +32,7 @@ use warnings;
     use constant EXE_CHARALIST    => 1;
         use constant EXE_CHARALIST_NEXT_BATTLE  => 1;
     use constant EXE_MARKET       => 1;
+    use constant EXE_MEGANE       => 1;
     use constant EXE_NEW          => 0;
         use constant EXE_NEW_FUKA            => 1;
     use constant EXE_DATA         => 1;
@@ -43,6 +44,7 @@ use warnings;
         use constant EXE_DATA_CASTLE_CONDITION  => 1;
         use constant EXE_DATA_FRAME_TYPE        => 1;
         use constant EXE_DATA_ADD_EFFECT        => 1;
+        use constant EXE_DATA_MEGANE_TYPE       => 1;
 
 
     use constant SAVE_SAMEDATA    => 0;    # 0=>上書き 1=>再更新

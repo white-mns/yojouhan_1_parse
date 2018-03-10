@@ -149,6 +149,8 @@ sub ParsePage{
     my $machine_data_nodes = &GetNode::GetNode_Tag_Class("table","machinedata", \$tree);
     my $item_caption_nodes = &GetNode::GetNode_Tag_Id("div","item", \$tree);
     my $nextday_h2_nodes   = &GetNode::GetNode_Tag_Id("h2","nextday", \$tree);
+    my $messe_waku_table_nodes  = &GetNode::GetNode_Tag_Class("table","messe_waku", \$tree);
+    my $link_nodes  = &GetNode::GetNode_Tag("a", \$tree);
 
     # データリスト取得
     if(exists($self->{DataHandlers}{Name}))            {$self->{DataHandlers}{Name}->GetData($e_no, $minieffect_nodes)};
@@ -156,6 +158,8 @@ sub ParsePage{
     if(exists($self->{DataHandlers}{FortressData}))    {$self->{DataHandlers}{FortressData}->GetData($e_no, $$spec_data_nodes[0])};
     if(exists($self->{DataHandlers}{CastleStructure})) {$self->{DataHandlers}{CastleStructure}->GetData($e_no, $$machine_data_nodes[0], $$item_caption_nodes[0])};
     if(exists($self->{DataHandlers}{Payoff}))          {$self->{DataHandlers}{Payoff}->GetData($e_no, $$nextday_h2_nodes[0]->right)};
+    if(exists($self->{CommonDatas}{Megane}))           {$self->{CommonDatas}{Megane}->GetRehiruData($messe_waku_table_nodes)};
+    if(exists($self->{CommonDatas}{Megane}))           {$self->{CommonDatas}{Megane}->GetMessageData($self->{CommonDatas}{PageType}{chara},$e_no,$link_nodes)};
 
     $tree = $tree->delete;
 }

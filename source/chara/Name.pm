@@ -101,6 +101,10 @@ sub GetNameData{
 sub Output(){
     my $self = shift;
     
+    # 眼鏡ｸｲｯ一覧のためにNPC、判別不能時の名前データを追加する
+    $self->{Datas}{Data}->AddData(join(ConstData::SPLIT, ($self->{ResultNo}, $self->{GenerateNo}, 10000, "判別不能", "判別不能")));
+    $self->{Datas}{Data}->AddData(join(ConstData::SPLIT, ($self->{ResultNo}, $self->{GenerateNo}, 10001, "レヒル主任", "レヒル主任")));
+
     foreach my $object( values %{ $self->{Datas} } ) {
         $object->Output();
     }

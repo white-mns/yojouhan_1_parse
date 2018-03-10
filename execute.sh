@@ -42,3 +42,4 @@ if [ -d ./data/utf/${ZIP_NAME} ]; then
 
 fi
 
+cd $CURENT  #元のディレクトリに戻る
