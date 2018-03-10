@@ -141,7 +141,7 @@ sub Execute{
 }
 
 #-----------------------------------#
-#    データ取得
+#    個別メッセージから眼鏡ｸｲｯ取得
 #------------------------------------
 #    引数｜e_no,名前データノード
 #-----------------------------------#
@@ -184,7 +184,41 @@ sub GetMessageData{
 }
 
 #-----------------------------------#
-#    データ取得
+#    戦闘結果から眼鏡ｸｲｯ取得
+#------------------------------------
+#    引数｜メッセ枠データノード
+#-----------------------------------#
+sub GetBattleMessageData{
+    my $self = shift;
+    my $page_type  = shift;
+    my $page_no  = shift;
+    my $messe_waku_table_nodes = shift;
+    my $messe_span_nodes = shift;
+    
+
+    my $isExistRehiru = 0;
+    $self->{MeganeData} = {};
+    foreach my $messe_waku_table_node (@$messe_waku_table_nodes){
+        my $e_no = $self->GetSpeakerFromNickname($messe_waku_table_node);
+        $self->GetMesseWakuData($e_no, $messe_waku_table_node);
+    }
+    
+    foreach my $messe_span_node (@$messe_span_nodes){
+        $self->GetMesseSpanData(10000, $messe_span_node); # 発言者を装飾タグで消している場合、判定不能データとしてｸｲｯを取得
+    }
+
+    foreach my $e_no( keys %{ $self->{MeganeData} } ) {
+        foreach my $megane_type_id( keys %{ $self->{MeganeData}{$e_no} } ) {
+            my @datas=($self->{ResultNo}, $self->{GenerateNo}, $e_no, $self->{CommonDatas}{PageType}{chara}, 0, $megane_type_id, $self->{MeganeData}{$e_no}{$megane_type_id});
+            $self->{Datas}{Megane}->AddData(join(ConstData::SPLIT, @datas));
+        }
+    }   
+    
+    return;
+}
+
+#-----------------------------------#
+#    NPCの眼鏡ｸｲｯ取得
 #------------------------------------
 #    引数｜メッセ枠データノード
 #-----------------------------------#
@@ -214,6 +248,7 @@ sub GetRehiruData{
     
     return;
 }
+
 #-----------------------------------#
 #    離しているのがレヒル主任かどうか取得
 #------------------------------------
@@ -230,6 +265,21 @@ sub isSpeakerRehiru{
     return ($speaker =~ /レヒル/) ? 1 : 0;
 }
 
+#-----------------------------------#
+#    セリフの発言者を愛称から取得
+#------------------------------------
+#    引数｜名前データノード
+#-----------------------------------#
+sub GetSpeakerFromNickname{
+    my $self  = shift;
+    my $messe_waku_table_node  = shift;
+
+    my $td_nodes   = &GetNode::GetNode_Tag("td", \$messe_waku_table_node);
+    my @td_children = $$td_nodes[0]->content_list();
+    my $speaker = shift(@td_children);
+    
+    return (exists($self->{CommonDatas}{NickName}{$speaker})) ? $self->{CommonDatas}{NickName}{$speaker} : 10000;
+}
 #-----------------------------------#
 #    眼鏡データ取得
 #------------------------------------
@@ -272,6 +322,7 @@ sub GetMesseSpanData{
     my $self      = shift;
     my $e_no      = shift;
     my $messe_span_node  = shift;
+
     my @span_children = $messe_span_node->content_list();
 
     foreach my $text (@span_children){

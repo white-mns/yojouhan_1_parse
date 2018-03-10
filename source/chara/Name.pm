@@ -37,6 +37,8 @@ sub new {
 sub Init(){
     my $self = shift;
     ($self->{ResultNo}, $self->{GenerateNo}, $self->{CommonDatas}) = @_;
+
+    $self->{CommonDatas}{NickName} = {};
     
     #初期化
     my $data = StoreData->new();
@@ -89,6 +91,9 @@ sub GetNameData{
 
     my @datas=($self->{ResultNo}, $self->{GenerateNo}, $self->{ENo}, $name, $nickname);
     $self->{Datas}{Data}->AddData(join(ConstData::SPLIT, @datas));
+
+    # 戦闘ページでの眼鏡ｸｲｯ発言者判定用に、共通変数へ愛称とEnoの対応を記録
+    $self->{CommonDatas}{NickName}{$nickname} = $self->{ENo};
 
     return;
 }
