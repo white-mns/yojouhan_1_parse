@@ -22,16 +22,16 @@ use warnings;
         use constant FLAGMENT_END      => 1;    #部分探索終了
     
     use constant EXE_CHARA      => 1;
-        use constant EXE_CHARA_NAME             => 0;
-        use constant EXE_CHARA_STATUS           => 0;
-        use constant EXE_CHARA_FORTRESS_DATA    => 0;
-        use constant EXE_CHARA_CASTLE_STRUCTURE => 0;
-        use constant EXE_CHARA_CASTLE_STRUCTURE => 0;
-        use constant EXE_CHARA_PAYOFF           => 0;
-    use constant EXE_TSV        => 0;
+        use constant EXE_CHARA_NAME             => 1;
+        use constant EXE_CHARA_STATUS           => 1;
+        use constant EXE_CHARA_FORTRESS_DATA    => 1;
+        use constant EXE_CHARA_CASTLE_STRUCTURE => 1;
+        use constant EXE_CHARA_CASTLE_STRUCTURE => 1;
+        use constant EXE_CHARA_PAYOFF           => 1;
+    use constant EXE_TSV        => 1;
         use constant EXE_TSV_UNITDATA     => 1;
         use constant EXE_TSV_CATALOGDATA  => 1;
     use constant EXE_CHARALIST  => 1;
-        use constant EXE_CHARALIST_NEXT_BATTLE => 0;
+        use constant EXE_CHARALIST_NEXT_BATTLE => 1;
     use constant EXE_MEGANE  => 1;
 1;
