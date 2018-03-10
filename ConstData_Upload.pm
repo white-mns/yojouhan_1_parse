@@ -17,7 +17,6 @@ use warnings;
 # ▼ 実行制御 =============================================
 #      実行する場合は 1 ，実行しない場合は 0 ．
     
-    use constant EXE_BATTLE       => 1;    # 戦闘結果データ生成
     
     use constant EXE_CHARA        => 1;
         use constant EXE_CHARA_NAME                            => 1;
@@ -31,6 +30,8 @@ use warnings;
         use constant EXE_CHARA_PAYOFF                          => 1;
     use constant EXE_CHARALIST    => 1;
         use constant EXE_CHARALIST_NEXT_BATTLE  => 1;
+    use constant EXE_BATTLE       => 1;
+        use constant EXE_BATTLE_MULTIPLE_BUYING => 1;
     use constant EXE_MARKET       => 1;
     use constant EXE_MEGANE       => 1;
     use constant EXE_NEW          => 0;

@@ -18,11 +18,7 @@ require "./source/lib/IO.pm";
 require "./source/lib/time.pm";
 require "./source/lib/NumCode.pm";
 
-require "./source/chara/Name.pm";
-require "./source/chara/Status.pm";
-require "./source/chara/FortressData.pm";
-require "./source/chara/CastleStructure.pm";
-require "./source/chara/Payoff.pm";
+require "./source/battle/MultipleBuying.pm";
 
 use ConstData;        #定数呼び出し
 
@@ -56,6 +52,7 @@ sub Init(){
     $self->{ResultNo0} = sprintf("%03d", $self->{ResultNo});
 
     #インスタンス作成
+    if(ConstData::EXE_BATTLE_MULTIPLE_BUYING) { $self->{DataHandlers}{MultipleBuying} = MultipleBuying->new();}
 
     #初期化処理
     foreach my $object( values %{ $self->{DataHandlers} } ) {
@@ -134,10 +131,12 @@ sub ParsePage{
     my $tree = HTML::TreeBuilder->new;
     $tree->parse($content);
 
-    my $messe_waku_table_nodes  = &GetNode::GetNode_Tag_Class("table","messe_waku", \$tree);
-    my $messe_span_nodes  = &GetNode::GetNode_Tag_Class("span","messe", \$tree);
+    my $messe_waku_table_nodes = &GetNode::GetNode_Tag_Class("table","messe_waku", \$tree);
+    my $shop_size_div_nodes    = &GetNode::GetNode_Tag_Class("div","shop_size", \$tree);
+    my $messe_span_nodes       = &GetNode::GetNode_Tag_Class("span","messe", \$tree);
 
     # データリスト取得
+    if(exists($self->{DataHandlers}{MultipleBuying}))  {$self->{DataHandlers}{MultipleBuying}->GetData($battle_no, $shop_size_div_nodes)};
     if(exists($self->{CommonDatas}{Megane}))           {$self->{CommonDatas}{Megane}->GetBattleMessageData($self->{CommonDatas}{PageType}{battle}, $battle_no, $messe_waku_table_nodes,$messe_span_nodes)};
 
     $tree = $tree->delete;

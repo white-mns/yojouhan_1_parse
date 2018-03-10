@@ -129,6 +129,12 @@ sub Main {
             $upload->Upload("./output/charalist/next_battle_" . $result_no . "_" . $generate_no . ".csv", 'next_battles');
         }
     }
+    if(ConstData::EXE_BATTLE){
+        if(ConstData::EXE_BATTLE_MULTIPLE_BUYING)    {
+            $upload->DeleteSameResult('multiple_buyings', $result_no, $generate_no);
+            $upload->Upload("./output/battle/multiple_buying_" . $result_no . "_" . $generate_no . ".csv", 'multiple_buyings');
+        }
+    }
     if(ConstData::EXE_MARKET)    {
         $upload->DeleteSameResult('markets', $result_no, $generate_no);
         $upload->Upload("./output/market/catalog_" . $result_no . "_" . $generate_no . ".csv", 'markets');
