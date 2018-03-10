@@ -78,7 +78,7 @@ sub Init(){
 sub Execute{
     my $self        = shift;
 
-    print "read files...\n";
+    print "read character files...\n";
 
     my $start = 1;
     my $end   = 0;

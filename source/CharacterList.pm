@@ -70,7 +70,7 @@ sub Init(){
 sub Execute{
     my $self        = shift;
 
-    print "read files...\n";
+    print "read characte list files...\n";
 
     my $directory = './data/utf/' . $self->{ResultNo0};
     $directory .= ($self->{GenerateNo} == 0) ? '' :  '_' . $self->{GenerateNo};
