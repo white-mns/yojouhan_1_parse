@@ -60,6 +60,12 @@ sub Init(){
 
     #他パッケージへの引き渡し用インスタンス
     $self->{CommonDatas}{Megane}        = $self;
+    $self->{CommonDatas}{PageType}      = {
+                                            "chara" => 1,
+                                            "battle" => 2,
+                                            "list" => 3,
+                                            "catalog" => 4,
+                                        };
 
     my $header_list = "";
     my $output_file = "";

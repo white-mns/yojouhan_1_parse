@@ -159,7 +159,7 @@ sub ParsePage{
     if(exists($self->{DataHandlers}{CastleStructure})) {$self->{DataHandlers}{CastleStructure}->GetData($e_no, $$machine_data_nodes[0], $$item_caption_nodes[0])};
     if(exists($self->{DataHandlers}{Payoff}))          {$self->{DataHandlers}{Payoff}->GetData($e_no, $$nextday_h2_nodes[0]->right)};
     if(exists($self->{CommonDatas}{Megane}))           {$self->{CommonDatas}{Megane}->GetRehiruData($messe_waku_table_nodes)};
-    if(exists($self->{CommonDatas}{Megane}))           {$self->{CommonDatas}{Megane}->GetMessageData("chara",$e_no,$link_nodes)};
+    if(exists($self->{CommonDatas}{Megane}))           {$self->{CommonDatas}{Megane}->GetMessageData($self->{CommonDatas}{PageType}{chara},$e_no,$link_nodes)};
 
     $tree = $tree->delete;
 }

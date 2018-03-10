@@ -107,7 +107,7 @@ sub ParsePage{
 
     # データリスト取得
     if(exists($self->{DataHandlers}{NextBattle})) {$self->{DataHandlers}{NextBattle}->GetData($hr_nodes)};
-    if(exists($self->{CommonDatas}{Megane}))      {$self->{CommonDatas}{Megane}->GetMessageData("list",0,$link_nodes)};
+    if(exists($self->{CommonDatas}{Megane}))      {$self->{CommonDatas}{Megane}->GetMessageData($self->{CommonDatas}{PageType}{list},0,$link_nodes)};
 
     $tree = $tree->delete;
 }
