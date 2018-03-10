@@ -202,7 +202,6 @@ sub GetRehiruData{
             $self->GetMesseWakuData(10001, $messe_waku_table_node);
             $self->{needsCountRehiru_character} = 0; #二人目以降のPCページではレヒル主任のｸｲｯは判定しない
         }else{
-            $self->GetMesseWakuData(10000, $messe_waku_table_node);
         }
     }
 
