@@ -205,7 +205,13 @@ sub GetRehiruData{
             $self->GetMesseWakuData(10000, $messe_waku_table_node);
         }
     }
-        
+
+    foreach my $e_no( keys %{ $self->{MeganeData} } ) {
+        foreach my $megane_type_id( keys %{ $self->{MeganeData}{$e_no} } ) {
+            my @datas=($self->{ResultNo}, $self->{GenerateNo}, $e_no, $self->{CommonDatas}{PageType}{chara}, 0, $megane_type_id, $self->{MeganeData}{$e_no}{$megane_type_id});
+            $self->{Datas}{Megane}->AddData(join(ConstData::SPLIT, @datas));
+        }
+    }   
     
     return;
 }
