@@ -46,6 +46,7 @@ use warnings;
         use constant EXE_DATA_FRAME_TYPE        => 1;
         use constant EXE_DATA_ADD_EFFECT        => 1;
         use constant EXE_DATA_MEGANE_TYPE       => 1;
+        use constant EXE_DATA_BUY_TYPE          => 1;
 
 
     use constant SAVE_SAMEDATA    => 0;    # 0=>上書き 1=>再更新

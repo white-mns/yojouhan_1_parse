@@ -61,6 +61,7 @@ sub Init(){
     $self->{DataHandlers}{FrameType}       = StoreProperName->new();
     $self->{DataHandlers}{AddEffect}       = StoreProperName->new();
     $self->{DataHandlers}{MeganeType}      = StoreProperName->new();
+    $self->{DataHandlers}{BuyType}         = StoreProperName->new();
 
     #他パッケージへの引き渡し用インスタンス
     $self->{CommonDatas}{UnitType}        = $self->{DataHandlers}{UnitType};
@@ -72,6 +73,7 @@ sub Init(){
     $self->{CommonDatas}{FrameType}       = $self->{DataHandlers}{FrameType};
     $self->{CommonDatas}{AddEffect}       = $self->{DataHandlers}{AddEffect};
     $self->{CommonDatas}{MeganeType}      = $self->{DataHandlers}{MeganeType};
+    $self->{CommonDatas}{BuyType}         = $self->{DataHandlers}{BuyType};
 
     my $header_list = "";
     my $output_file = "";
@@ -139,6 +141,13 @@ sub Init(){
     $output_file = "./output/data/". "megane_type" . ".csv";
     $self->{DataHandlers}{MeganeType}->Init($header_list, $output_file, " ");
     
+    $header_list = [
+                "buy_type_id",
+                "name",
+    ];
+    $output_file = "./output/data/". "buy_type" . ".csv";
+    $self->{DataHandlers}{BuyType}->Init($header_list, $output_file, " ");
+
     return;
 }
 
