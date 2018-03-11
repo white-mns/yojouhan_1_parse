@@ -84,6 +84,10 @@ sub Main {
 		    $upload->DeleteAll("megane_type_lists");
             $upload->Upload("./output/data/megane_type.csv", 'megane_type_lists');
         }
+        if(ConstData::EXE_DATA_BUY_TYPE)    {
+		    $upload->DeleteAll("buy_type_lists");
+            $upload->Upload("./output/data/buy_type.csv", 'buy_type_lists');
+        }
     }
     if(ConstData::EXE_CHARA){
         if(ConstData::EXE_CHARA_NAME)    {

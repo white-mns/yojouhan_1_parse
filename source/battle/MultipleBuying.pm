@@ -48,6 +48,7 @@ sub Init(){
                 "e_no",
                 "battle_no",
                 "multiple_buying",
+                "buy_type",
                 "buy_num",
     );
 
@@ -104,9 +105,10 @@ sub GetMultipleBuyingData{
             # 販売数の取得
             if($shop_size_child =~ /を(\d+)個販売/) {
                 my $buy_num = $1;
+                my $buy_type = $self->{CommonDatas}{BuyType}->GetOrAddId("商品");
     
                 if($e_no > 0 && $multiple_buying >= 0){
-                    my @datas=($self->{ResultNo}, $self->{GenerateNo}, $e_no, $self->{BattleNo}, $multiple_buying, $buy_num);
+                    my @datas=($self->{ResultNo}, $self->{GenerateNo}, $e_no, $self->{BattleNo}, $multiple_buying, $buy_type, $buy_num);
                     $self->{Datas}{Data}->AddData(join(ConstData::SPLIT, @datas));
                 }
                 last;
@@ -115,9 +117,10 @@ sub GetMultipleBuyingData{
             # サービス回数の取得
             if($shop_size_child =~ /に(\d+)回/) {
                 my $buy_num = $1;
+                my $buy_type = $self->{CommonDatas}{BuyType}->GetOrAddId("サービス");
     
                 if($e_no > 0 && $multiple_buying >= 0){
-                    my @datas=($self->{ResultNo}, $self->{GenerateNo}, $e_no, $self->{BattleNo}, $multiple_buying, $buy_num);
+                    my @datas=($self->{ResultNo}, $self->{GenerateNo}, $e_no, $self->{BattleNo}, $multiple_buying, $buy_type, $buy_num);
                     $self->{Datas}{Data}->AddData(join(ConstData::SPLIT, @datas));
                 }
                 last;
