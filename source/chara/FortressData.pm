@@ -24,10 +24,9 @@ package FortressData;
 #-----------------------------------#
 sub new {
   my $class = shift;
-  my %datas = ();
   
   bless {
-        Datas        => \%datas,
+        Datas => {},
   }, $class;
 }
 
@@ -39,8 +38,13 @@ sub Init(){
     ($self->{ResultNo}, $self->{GenerateNo}, $self->{CommonDatas}) = @_;
     
     #初期化
-    my $data = StoreData->new();
-    my @headerList = (
+    $self->{Datas}{FortressData}            = StoreData->new();
+    $self->{Datas}{FortressGuardData}       = StoreData->new();
+    $self->{Datas}{CastleConditionTextData} = StoreData->new();
+
+    my $header_list = "";
+   
+    $header_list = [
                 "result_no",
                 "generate_no",
                 "e_no",
@@ -55,13 +59,10 @@ sub Init(){
                 "mob",
                 "drink",
                 "regalia",
-    );
+    ];
+    $self->{Datas}{FortressData}->Init($header_list);
 
-    $self->{Datas}{FortressData}  = $data;
-    $self->{Datas}{FortressData}->Init(\@headerList);
-
-    $data = StoreData->new();
-    @headerList = (
+    $header_list = [
                 "result_no",
                 "generate_no",
                 "e_no",
@@ -70,27 +71,20 @@ sub Init(){
                 "cold",
                 "flame",
                 "saint_devil",
-    );
-
-    $self->{Datas}{FortressGuardData}  = $data;
-    $self->{Datas}{FortressGuardData}->Init(\@headerList);
+    ];
+    $self->{Datas}{FortressGuardData}->Init($header_list);
    
-    $data = StoreData->new();
-    @headerList = (
+    $header_list = [
                 "result_no",
                 "generate_no",
                 "e_no",
                 "condition_text",
-    );
-
-    $self->{Datas}{CastleConditionTextData}  = $data;
-    $self->{Datas}{CastleConditionTextData}->Init(\@headerList);
-
-
+    ];
+    $self->{Datas}{CastleConditionTextData}->Init($header_list);
 
     #出力ファイル設定
-    $self->{Datas}{FortressData}->SetOutputName( "./output/chara/fortress_data_" . $self->{ResultNo} . "_" . $self->{GenerateNo} . ".csv" );
-    $self->{Datas}{FortressGuardData}->SetOutputName( "./output/chara/fortress_guard_" . $self->{ResultNo} . "_" . $self->{GenerateNo} . ".csv" );
+    $self->{Datas}{FortressData}->SetOutputName           ( "./output/chara/fortress_data_"         . $self->{ResultNo} . "_" . $self->{GenerateNo} . ".csv" );
+    $self->{Datas}{FortressGuardData}->SetOutputName      ( "./output/chara/fortress_guard_"        . $self->{ResultNo} . "_" . $self->{GenerateNo} . ".csv" );
     $self->{Datas}{CastleConditionTextData}->SetOutputName( "./output/chara/castle_condition_text_" . $self->{ResultNo} . "_" . $self->{GenerateNo} . ".csv" );
     return;
 }

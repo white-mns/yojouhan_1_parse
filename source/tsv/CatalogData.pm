@@ -23,15 +23,9 @@ package CatalogData;
 #-----------------------------------#
 sub new {
   my $class = shift;
-  my %datas = ();
   
   bless {
-        Datas        => \%datas,
-        Output       => "",
-        ResultNo    => "",
-        GenerateNo  => "",
-        ENo          => "",
-
+        Datas => {},
   }, $class;
 }
 
@@ -43,8 +37,10 @@ sub Init(){
     ($self->{ResultNo}, $self->{GenerateNo}, $self->{CommonDatas}) = @_;
     
     #初期化
-    my $item = StoreData->new();
-    my @headerList = (
+    $self->{Datas}{Item}  = StoreData->new();
+    my $header_list = "";
+   
+    $header_list = [
                 "result_no",
                 "generate_no",
                 "market_no",
@@ -68,10 +64,9 @@ sub Init(){
                 "fuka2",
                 "strength",
                 "e_no",
-    );
+    ];
 
-    $self->{Datas}{Item}  = $item;
-    $self->{Datas}{Item}->Init(\@headerList);
+    $self->{Datas}{Item}->Init($header_list);
     
     #出力ファイル設定
     $self->{Datas}{Item}->SetOutputName( "./output/market/catalog_" . $self->{ResultNo} . "_" . $self->{GenerateNo} . ".csv" );

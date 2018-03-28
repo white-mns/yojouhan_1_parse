@@ -24,10 +24,9 @@ package NextBattle;
 #-----------------------------------#
 sub new {
   my $class = shift;
-  my %datas = ();
   
   bless {
-        Datas        => \%datas,
+        Datas => {},
   }, $class;
 }
 
@@ -39,16 +38,17 @@ sub Init(){
     ($self->{ResultNo}, $self->{GenerateNo}, $self->{CommonDatas}) = @_;
     
     #初期化
-    my $data = StoreData->new();
-    my @headerList = (
+    $self->{Datas}{Data}  = StoreData->new();
+    my $header_list = "";
+   
+    $header_list = [
                 "result_no",
                 "generate_no",
                 "block_no",
                 "e_no",
-    );
+    ];
 
-    $self->{Datas}{Data}  = $data;
-    $self->{Datas}{Data}->Init(\@headerList);
+    $self->{Datas}{Data}->Init($header_list);
     
     #出力ファイル設定
     $self->{Datas}{Data}->SetOutputName( "./output/charalist/next_battle_" . $self->{ResultNo} . "_" . $self->{GenerateNo} . ".csv" );
