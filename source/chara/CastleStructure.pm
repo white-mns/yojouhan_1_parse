@@ -24,10 +24,9 @@ package CastleStructure;
 #-----------------------------------#
 sub new {
   my $class = shift;
-  my %datas = ();
   
   bless {
-        Datas        => \%datas,
+        Datas => {},
   }, $class;
 }
 
@@ -39,31 +38,34 @@ sub Init(){
     ($self->{ResultNo}, $self->{GenerateNo}, $self->{CommonDatas}) = @_;
     
     #初期化
-    my @headerList = (
+    $self->{Datas}{CastleStructure}             = StoreData->new();
+    $self->{Datas}{CastleStructureMajorTypeNum} = StoreData->new();
+
+    my $header_list = "";
+   
+    $header_list = [
                 "result_no",
                 "generate_no",
                 "e_no",
                 "frame_type",
                 "i_no",
-    );
+    ];
 
-    $self->{Datas}{CastleStructure}  = StoreData->new();
-    $self->{Datas}{CastleStructure}->Init(\@headerList);
+    $self->{Datas}{CastleStructure}->Init($header_list);
     
-    @headerList = (
+    $header_list = [
                 "result_no",
                 "generate_no",
                 "e_no",
                 "build_num",
                 "guard_num",
                 "goods_num",
-    );
+    ];
 
-    $self->{Datas}{CastleStructureMajorTypeNum}  = StoreData->new();
-    $self->{Datas}{CastleStructureMajorTypeNum}->Init(\@headerList);
+    $self->{Datas}{CastleStructureMajorTypeNum}->Init($header_list);
     
     #出力ファイル設定
-    $self->{Datas}{CastleStructure}->SetOutputName( "./output/chara/castle_structure_" . $self->{ResultNo} . "_" . $self->{GenerateNo} . ".csv" );
+    $self->{Datas}{CastleStructure}->SetOutputName            ( "./output/chara/castle_structure_"                . $self->{ResultNo} . "_" . $self->{GenerateNo} . ".csv" );
     $self->{Datas}{CastleStructureMajorTypeNum}->SetOutputName( "./output/chara/castle_structure_major_type_num_" . $self->{ResultNo} . "_" . $self->{GenerateNo} . ".csv" );
     return;
 }

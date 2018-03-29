@@ -1,4 +1,3 @@
-#/usr/bin/perl
 #===================================================================
 #    データベースへのアップロード
 #-------------------------------------------------------------------
@@ -163,33 +162,3 @@ sub Main {
     return;
 }
 
-#-----------------------------------#
-#
-#    更新回の指定
-#
-#-----------------------------------#
-sub ResultNum{
-    my $num = $ARGV[0];
-    
-    unless(defined($num)){
-        
-        while(1){
-            print "input result number...\n";
-            
-            chomp(my $in = <STDIN> );
-            
-            if($in =~ /^[0-9]+$/){
-            }else{
-                print "error : input unexpected data\n";
-                die;
-            }
-            $in+=0;
-            
-            if($in >= 0){
-                $num = $in;
-                return $num;
-            }
-        }
-    }
-    return $num;
-}

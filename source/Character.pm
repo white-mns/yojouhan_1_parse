@@ -35,15 +35,12 @@ package Character;
 #    コンストラクタ
 #-----------------------------------#
 sub new {
-  my $class        = shift;
-  my %datas        = ();
-  my %dataHandlers = ();
-  my %methods      = ();
+  my $class = shift;
 
   bless {
-    Datas         => \%datas,
-    DataHandlers  => \%dataHandlers,
-    Methods       => \%methods,
+    Datas         => {},
+    DataHandlers  => {},
+    Methods       => {},
   }, $class;
 }
 

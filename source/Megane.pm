@@ -30,15 +30,12 @@ package Megane;
 #    コンストラクタ
 #-----------------------------------#
 sub new {
-  my $class        = shift;
-  my %datas        = ();
-  my %dataHandlers = ();
-  my %methods      = ();
+  my $class = shift;
 
   bless {
-    Datas         => \%datas,
-    DataHandlers  => \%dataHandlers,
-    Methods       => \%methods,
+    Datas         => {},
+    DataHandlers  => {},
+    Methods       => {},
   }, $class;
 }
 
@@ -209,7 +206,7 @@ sub GetBattleMessageData{
 
     foreach my $e_no( keys %{ $self->{MeganeData} } ) {
         foreach my $megane_type_id( keys %{ $self->{MeganeData}{$e_no} } ) {
-            my @datas=($self->{ResultNo}, $self->{GenerateNo}, $e_no, $self->{CommonDatas}{PageType}{chara}, 0, $megane_type_id, $self->{MeganeData}{$e_no}{$megane_type_id});
+            my @datas=($self->{ResultNo}, $self->{GenerateNo}, $e_no, $self->{CommonDatas}{PageType}{battle}, $page_no, $megane_type_id, $self->{MeganeData}{$e_no}{$megane_type_id});
             $self->{Datas}{Megane}->AddData(join(ConstData::SPLIT, @datas));
         }
     }   
@@ -281,7 +278,7 @@ sub GetSpeakerFromNickname{
     return (exists($self->{CommonDatas}{NickName}{$speaker})) ? $self->{CommonDatas}{NickName}{$speaker} : 10000;
 }
 #-----------------------------------#
-#    眼鏡データ取得
+#    メッセージテーブルから文字列を取得し眼鏡データ取得関数へ渡す
 #------------------------------------
 #    引数｜ENo、メッセージテーブルノード
 #-----------------------------------#
@@ -295,28 +292,15 @@ sub GetMesseWakuData{
     my $speaker = shift(@td_children);
     
     foreach my $text (@td_children){
-        my $megane_list = [];
-
-        # 事前に半角括弧を全角に変換しておく
-        #   ※正規表現の[（\(]では、何故かｸｲｯとﾊﾟﾘｰﾝが途中で切れてヒットするため
-        $text =~ s/\(/（/g;
-        $text =~ s/\)/）/g;
-
-        @$megane_list = $text =~ /（(.*?眼鏡.*?)）/g;
-        foreach my $megane_text (@$megane_list){
-            my $megane_id = $self->{CommonDatas}{MeganeType}->GetOrAddId($megane_text);
-            $self->{MeganeData}{$e_no}{$megane_id} += 1;
-            $self->{TotalMeganeData}{$e_no}{$megane_id} += 1;
-            $self->{AccMeganeData}{$e_no}{$megane_id} += 1;
-        }   
+        $self->getMeganeDataFromText($e_no, $text);
     }
 
     return;
 }
 #-----------------------------------#
-#    眼鏡データ取得
+#    メッセージspanノードから文字列を取得し眼鏡データ取得関数へ渡す
 #------------------------------------
-#    引数｜ENo、メッセージspanノード
+#    引数｜eno、メッセージspanノード
 #-----------------------------------#
 sub GetMesseSpanData{
     my $self      = shift;
@@ -326,25 +310,42 @@ sub GetMesseSpanData{
     my @span_children = $messe_span_node->content_list();
 
     foreach my $text (@span_children){
-        my $megane_list = [];
-
-        # 事前に半角括弧を全角に変換しておく
-        #   ※正規表現の[（\(]では、何故かｸｲｯとﾊﾟﾘｰﾝが途中で切れてヒットするため
-        $text =~ s/\(/（/g;
-        $text =~ s/\)/）/g;
-
-        @$megane_list = $text =~ /（(.*?眼鏡.*?)）/g;
-        foreach my $megane_text (@$megane_list){
-            my $megane_id = $self->{CommonDatas}{MeganeType}->GetOrAddId($megane_text);
-            $self->{MeganeData}{$e_no}{$megane_id} += 1;
-            $self->{TotalMeganeData}{$e_no}{$megane_id} += 1;
-            $self->{AccMeganeData}{$e_no}{$megane_id} += 1;
-            
-        }   
+        $self->getMeganeDataFromText($e_no, $text);
     }
 
     return;
 }
+#-----------------------------------#
+#    眼鏡データ取得
+#------------------------------------
+#    引数｜eno、メッセージspanノード
+#-----------------------------------#
+sub getMeganeDataFromText{
+    my $self = shift;
+    my $e_no = shift;
+    my $text = shift;
+    my $megane_list = [];
+
+    # 事前に全角括弧を半角に変換しておく
+    #   ※半角括弧が混じったときに対応するため、また、複数眼鏡ｸｲｯが現れたときに、あいだの文章がヒットしないようにするため
+    #   ※perlの正規表現では、いずれかの文字列をヒットさせる方法に全角文字列を入れたとき（[^（）]等）、正しい結果が得られない
+    $text =~ s/（/\(/g;
+    $text =~ s/）/\)/g;
+
+    @$megane_list = $text =~ /\(([^\(\)]*?(眼鏡|ｸｲｯ|眼鏡ｸｲｯ)[^\(\)]*?)\)/g;
+    foreach my $megane_text (@$megane_list){
+        if($megane_text eq "眼鏡" || $megane_text eq "ｸｲｯ") {next;}    # 正規表現の指定が正しくないのか、単独の眼鏡とｸｲｯがヒットしてしまうので除外
+
+        my $megane_id = $self->{CommonDatas}{MeganeType}->GetOrAddId($megane_text);
+        $self->{MeganeData}{$e_no}{$megane_id} += 1;
+        $self->{TotalMeganeData}{$e_no}{$megane_id} += 1;
+        $self->{AccMeganeData}{$e_no}{$megane_id} += 1;
+        
+    }
+    return;
+}
+
+
 
 sub OutputTotalMeganeData(){
     my $self = shift;
